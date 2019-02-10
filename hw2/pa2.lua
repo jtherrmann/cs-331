@@ -54,4 +54,16 @@ function pa2.collatz(k)
 end
 
 
+function pa2.backSubs(s)
+   local revStr = string.reverse(s)
+   local length = #revStr
+   coroutine.yield("")
+   for offset = 0, length - 1 do
+      for index = 1, length - offset do
+	 coroutine.yield(string.sub(revStr, index, index + offset))
+      end
+   end
+end
+
+
 return pa2
