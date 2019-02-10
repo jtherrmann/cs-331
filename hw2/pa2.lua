@@ -9,7 +9,7 @@ local pa2 = {}
 -- Pre:
 -- - f is a one-parameter function that accepts any value in table t.
 function pa2.mapTable(f, t)
-   mtbl = {}
+   local mtbl = {}
    for k, v in pairs(t) do
       mtbl[k] = f(v)
    end
@@ -18,7 +18,7 @@ end
 
 
 function pa2.concatMax(str, maxLen)
-   concatStr = ""
+   local concatStr = ""
    while #concatStr + #str <= maxLen do
       concatStr = concatStr .. str
    end
