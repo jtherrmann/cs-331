@@ -26,4 +26,32 @@ function pa2.concatMax(str, maxLen)
 end
 
 
+local function c(n)
+   if n % 2 == 0 then
+      return n / 2
+   else
+      return 3 * n + 1
+   end
+end
+
+
+function pa2.collatz(k)
+   local last = nil
+
+   function iter(dummy1, dummy2)
+      if last == 1 then
+	 return nil
+      end
+      if last == nil then
+	 last = k
+      else
+	 last = c(last)
+      end
+      return last
+   end
+
+   return iter, nil, nil
+end
+
+
 return pa2
