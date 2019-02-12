@@ -58,7 +58,7 @@ end
 function pa2.collatz(k)
    local last = nil
 
-   function iter(dummy1, dummy2)
+   local function iter(dummy1, dummy2)
       if last == 1 then
 	 return nil
       end
