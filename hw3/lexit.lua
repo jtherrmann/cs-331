@@ -163,13 +163,13 @@ function lexit.lex(program)
    -- INVARIANT: when getLexeme is called, pos is
    --  EITHER the index of the first character of the
    --  next lexeme OR program:len()+1
-   local state     -- Current state for our state machine
-   local ch        -- Current character
-   local lexstr    -- The lexeme, so far
-   local category  -- Category of lexeme, set when state set to DONE
-   local handlers  -- Dispatch table; value created later
-   local endquote  -- TODO: comments
-   local prevLexstr -- TODO: comments
+   local state       -- Current state for our state machine
+   local ch          -- Current character
+   local lexstr      -- The lexeme, so far
+   local category    -- Category of lexeme, set when state set to DONE
+   local handlers    -- Dispatch table; value created later
+   local strQuote    -- Last quote character to begin a string literal
+   local prevLexstr  -- Previous lexeme
 
    -- ***** States *****
 
@@ -243,8 +243,9 @@ function lexit.lex(program)
 
    -- ***** Other Utility Functions *****
 
-   -- TODO:
-   -- - comments
+   -- maximalMunchSpecialCase
+   -- Return true if the previous lexeme indicates an exception to the maximal
+   -- munch rule, false otherwise.
    local function maximalMunchSpecialCase()
       return category == lexit.ID or category == lexit.NUMLIT
 	 or prevLexstr == "]" or prevLexstr == ")" or prevLexstr == "true"
@@ -276,7 +277,7 @@ function lexit.lex(program)
 	 add1()
 	 state = PLUS_MINUS
       elseif ch == "'" or ch == '"' then
-	 endquote = ch
+	 strQuote = ch
 	 add1()
 	 state = STRING
       elseif ch == "&" then
@@ -354,7 +355,7 @@ function lexit.lex(program)
    end
 
    local function handle_STRING()
-      if ch == endquote then
+      if ch == strQuote then
 	 add1()
 	 state = DONE
 	 category = lexit.STRLIT
