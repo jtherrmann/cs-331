@@ -247,7 +247,7 @@ function lexit.lex(program)
    -- - add all the checks required by the spec, but see if they show up as
    --   failing tests first
    local function maximalMunchSpecialCase()
-      return category == lexit.ID
+      return category == lexit.ID or category == lexit.NUMLIT
    end
 
    -- ***** State-Handler Functions *****
