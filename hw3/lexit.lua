@@ -5,6 +5,8 @@
 --   comparisons, etc.)
 -- - update comments
 -- - coding standards
+-- - exercise A (forth)
+-- - re-read project reqs
 
 -- lexer.lua
 -- VERSION 3
