@@ -1,4 +1,6 @@
 -- TODO
+-- - ask chappell if arbitrary-length lookahead is allowed
+-- - search for TODO in file
 -- - use linter / static analysis (check for undefined variables, cross-type
 --   comparisons, etc.)
 -- - update comments
