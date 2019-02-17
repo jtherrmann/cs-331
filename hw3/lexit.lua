@@ -28,7 +28,7 @@
 -- *********************************************************************
 
 
-local lexer = {}  -- Our module; members are added below
+local lexit = {}  -- Our module; members are added below
 
 
 -- *********************************************************************
@@ -37,18 +37,18 @@ local lexer = {}  -- Our module; members are added below
 
 
 -- Numeric constants representing lexeme categories
-lexer.KEY    = 1
-lexer.ID     = 2
-lexer.NUMLIT = 3
-lexer.OP     = 4
-lexer.PUNCT  = 5
-lexer.MAL    = 6
+lexit.KEY    = 1
+lexit.ID     = 2
+lexit.NUMLIT = 3
+lexit.OP     = 4
+lexit.PUNCT  = 5
+lexit.MAL    = 6
 
 
 -- catnames
 -- Array of names of lexeme categories.
 -- Human-readable strings. Indices are above numeric constants.
-lexer.catnames = {
+lexit.catnames = {
     "Keyword",
     "Identifier",
     "NumericLiteral",
@@ -134,7 +134,7 @@ end
 --     for lexstr, cat in lexer.lex(program) do
 -- Here, lexstr is the string form of a lexeme, and cat is a number
 -- representing a lexeme category. (See Public Constants.)
-function lexer.lex(program)
+function lexit.lex(program)
     -- ***** Variables (like class data members) *****
 
     local pos       -- Index of next character in program
@@ -233,7 +233,7 @@ function lexer.lex(program)
         if isIllegal(ch) then
             add1()
             state = DONE
-            category = lexer.MAL
+            category = lexit.MAL
         elseif isLetter(ch) or ch == "_" then
             add1()
             state = LETTER
@@ -255,7 +255,7 @@ function lexer.lex(program)
         else
             add1()
             state = DONE
-            category = lexer.PUNCT
+            category = lexit.PUNCT
         end
     end
 
@@ -266,9 +266,9 @@ function lexer.lex(program)
             state = DONE
             if lexstr == "begin" or lexstr == "end"
               or lexstr == "print" then
-                category = lexer.KEY
+                category = lexit.KEY
             else
-                category = lexer.ID
+                category = lexit.ID
             end
         end
     end
@@ -281,7 +281,7 @@ function lexer.lex(program)
             state = DIGDOT
         else
             state = DONE
-            category = lexer.NUMLIT
+            category = lexit.NUMLIT
         end
     end
 
@@ -290,7 +290,7 @@ function lexer.lex(program)
             add1()
         else
             state = DONE
-            category = lexer.NUMLIT
+            category = lexit.NUMLIT
         end
     end
 
@@ -300,7 +300,7 @@ function lexer.lex(program)
             state = DIGDOT
         else
             state = DONE
-            category = lexer.OP
+            category = lexit.OP
         end
     end
 
@@ -308,7 +308,7 @@ function lexer.lex(program)
         if ch == "+" or ch == "=" then
             add1()
             state = DONE
-            category = lexer.OP
+            category = lexit.OP
         elseif isDigit(ch) then
             add1()
             state = DIGIT
@@ -319,11 +319,11 @@ function lexer.lex(program)
                 state = DIGDOT
             else  -- lexeme is just "+"; do not add dot to lexeme
                 state = DONE
-                category = lexer.OP
+                category = lexit.OP
             end
         else
             state = DONE
-            category = lexer.OP
+            category = lexit.OP
         end
     end
 
@@ -331,7 +331,7 @@ function lexer.lex(program)
         if ch == "-" or ch == "=" then
             add1()
             state = DONE
-            category = lexer.OP
+            category = lexit.OP
         elseif isDigit(ch) then
             add1()
             state = DIGIT
@@ -342,11 +342,11 @@ function lexer.lex(program)
                 state = DIGDOT
             else  -- lexeme is just "-"; do not add dot to lexeme
                 state = DONE
-                category = lexer.OP
+                category = lexit.OP
             end
         else
             state = DONE
-            category = lexer.OP
+            category = lexit.OP
         end
     end
 
@@ -354,10 +354,10 @@ function lexer.lex(program)
         if ch == "=" then
             add1()
             state = DONE
-            category = lexer.OP
+            category = lexit.OP
         else
             state = DONE
-            category = lexer.OP
+            category = lexit.OP
         end
     end
 
@@ -410,5 +410,5 @@ end
 -- *********************************************************************
 
 
-return lexer
+return lexit
 
