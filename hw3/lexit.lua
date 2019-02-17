@@ -245,8 +245,6 @@ function lexit.lex(program)
 
    -- TODO:
    -- - comments
-   -- - add all the checks required by the spec, but see if they show up as
-   --   failing tests first
    local function maximalMunchSpecialCase()
       return category == lexit.ID or category == lexit.NUMLIT
 	 or prevLexstr == "]" or prevLexstr == ")" or prevLexstr == "true"
