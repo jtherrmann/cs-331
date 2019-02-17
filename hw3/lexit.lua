@@ -237,6 +237,16 @@ function lexit.lex(program)
       end
    end
 
+   -- ***** Other Utility Functions *****
+
+   -- TODO:
+   -- - comments
+   -- - add all the checks required by the spec, but see if they show up as
+   --   failing tests first
+   local function maximalMunchSpecialCase()
+      return category == lexit.ID
+   end
+
    -- ***** State-Handler Functions *****
 
    -- A function with a name like handle_XYZ is the handler function
@@ -310,7 +320,7 @@ function lexit.lex(program)
    end
 
    local function handle_PLUS()
-      if isDigit(ch) then
+      if isDigit(ch) and not maximalMunchSpecialCase() then
 	 add1()
 	 state = DIGIT
       else
@@ -320,7 +330,7 @@ function lexit.lex(program)
    end
 
    local function handle_MINUS()
-      if isDigit(ch) then
+      if isDigit(ch) and not maximalMunchSpecialCase() then
 	 add1()
 	 state = DIGIT
       else
