@@ -169,6 +169,7 @@ function lexit.lex(program)
    local category  -- Category of lexeme, set when state set to DONE
    local handlers  -- Dispatch table; value created later
    local endquote  -- TODO: comments
+   local prevLexstr -- TODO: comments
 
    -- ***** States *****
 
@@ -248,6 +249,8 @@ function lexit.lex(program)
    --   failing tests first
    local function maximalMunchSpecialCase()
       return category == lexit.ID or category == lexit.NUMLIT
+	 or prevLexstr == "]" or prevLexstr == ")" or prevLexstr == "true"
+	 or prevLexstr == "false"
    end
 
    -- ***** State-Handler Functions *****
@@ -432,6 +435,7 @@ function lexit.lex(program)
       end
 
       skipWhitespace()
+      prevLexstr = lexstr
       return lexstr, category
    end
 
