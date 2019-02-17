@@ -173,11 +173,9 @@ function lexit.lex(program)
    local START  = 1
    local LETTER = 2
    local DIGIT  = 3
-   local DIGDOT = 4
-   local DOT    = 5
-   local PLUS   = 6
-   local MINUS  = 7
-   local STAR   = 8
+   local PLUS   = 4
+   local MINUS  = 5
+   local STAR   = 6
 
    -- ***** Character-Related Utility Functions *****
 
@@ -249,9 +247,6 @@ function lexit.lex(program)
       elseif isDigit(ch) then
 	 add1()
 	 state = DIGIT
-      elseif ch == "." then
-	 add1()
-	 state = DOT
       elseif ch == "+" then
 	 add1()
 	 state = PLUS
@@ -287,31 +282,9 @@ function lexit.lex(program)
    local function handle_DIGIT()
       if isDigit(ch) then
 	 add1()
-      elseif ch == "." then
-	 add1()
-	 state = DIGDOT
       else
 	 state = DONE
 	 category = lexit.NUMLIT
-      end
-   end
-
-   local function handle_DIGDOT()
-      if isDigit(ch) then
-	 add1()
-      else
-	 state = DONE
-	 category = lexit.NUMLIT
-      end
-   end
-
-   local function handle_DOT()
-      if isDigit(ch) then
-	 add1()
-	 state = DIGDOT
-      else
-	 state = DONE
-	 category = lexit.OP
       end
    end
 
@@ -323,15 +296,6 @@ function lexit.lex(program)
       elseif isDigit(ch) then
 	 add1()
 	 state = DIGIT
-      elseif ch == "." then
-	 if isDigit(nextChar()) then
-	    add1()  -- add dot to lexeme
-	    add1()  -- add digit to lexeme (OPTIONAL)
-	    state = DIGDOT
-	 else  -- lexeme is just "+"; do not add dot to lexeme
-	    state = DONE
-	    category = lexit.OP
-	 end
       else
 	 state = DONE
 	 category = lexit.OP
@@ -346,15 +310,6 @@ function lexit.lex(program)
       elseif isDigit(ch) then
 	 add1()
 	 state = DIGIT
-      elseif ch == "." then
-	 if isDigit(nextChar()) then
-	    add1()  -- add dot to lexeme
-	    add1()  -- add digit to lexeme (OPTIONAL)
-	    state = DIGDOT
-	 else  -- lexeme is just "-"; do not add dot to lexeme
-	    state = DONE
-	    category = lexit.OP
-	 end
       else
 	 state = DONE
 	 category = lexit.OP
@@ -379,8 +334,6 @@ function lexit.lex(program)
       [START]=handle_START,
       [LETTER]=handle_LETTER,
       [DIGIT]=handle_DIGIT,
-      [DIGDOT]=handle_DIGDOT,
-      [DOT]=handle_DOT,
       [PLUS]=handle_PLUS,
       [MINUS]=handle_MINUS,
       [STAR]=handle_STAR,
