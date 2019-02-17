@@ -178,9 +178,8 @@ function lexit.lex(program)
    local DIGIT          = 3
    local PLUS           = 4
    local MINUS          = 5
-   local STAR           = 6
-   local EXPONENT       = 7
-   local STRING         = 8
+   local EXPONENT       = 6
+   local STRING         = 7
 
    -- ***** Character-Related Utility Functions *****
 
@@ -276,9 +275,6 @@ function lexit.lex(program)
       elseif ch == "-" then
 	 add1()
 	 state = MINUS
-      elseif ch == "*" or ch == "/" or ch == "=" then
-	 add1()
-	 state = STAR
       elseif ch == "'" or ch == '"' then
 	 endquote = ch
 	 add1()
@@ -345,17 +341,6 @@ function lexit.lex(program)
       end
    end
 
-   local function handle_STAR()  -- Handle * or / or =
-      if ch == "=" then
-	 add1()
-	 state = DONE
-	 category = lexit.OP
-      else
-	 state = DONE
-	 category = lexit.OP
-      end
-   end
-
    local function handle_EXPONENT()
       if isDigit(ch) then
 	 add1()
@@ -391,7 +376,6 @@ function lexit.lex(program)
       [DIGIT]=handle_DIGIT,
       [PLUS]=handle_PLUS,
       [MINUS]=handle_MINUS,
-      [STAR]=handle_STAR,
       [EXPONENT]=handle_EXPONENT,
       [STRING]=handle_STRING,
    }
