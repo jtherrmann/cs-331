@@ -210,6 +210,8 @@ function lexit.lex(program)
         drop1()
     end
 
+    -- TODO: change comment syntax here
+
     -- skipWhitespace
     -- Skip whitespace and comments, moving pos to the beginning of
     -- the next lexeme, or to program:len()+1.
