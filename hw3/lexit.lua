@@ -1,3 +1,20 @@
+-- TODO
+-- - update comments
+-- - coding standards
+-- - differences:
+--   - whitespace: StringLiteral may contain whitespace
+--   - comment: completely different
+--   - legal: legal chars outside comments *and StringLiteral lexemes*
+--   - maximal munch: there's an exception to the rule
+--   - lexeme categories: adds StringLiteral
+--   - keyword: completely different
+--   - identifier: seems similar or the same, worded differently
+--   - NumericLiteral: very different
+--   - StringLiteral: added
+--   - Operator: somewhat different
+--   - Punctuation: seems similar or the same, worded differently
+--   - Malformed: adds bad string
+
 -- lexer.lua
 -- VERSION 3
 -- Glenn G. Chappell
