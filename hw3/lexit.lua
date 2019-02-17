@@ -181,6 +181,7 @@ function lexit.lex(program)
    local STRING         = 6
    local AMPERSAND      = 7
    local PIPE           = 8
+   local EXCLAMATION    = 9
 
    -- ***** Character-Related Utility Functions *****
 
@@ -283,6 +284,9 @@ function lexit.lex(program)
       elseif ch == "|" then
 	 add1()
 	 state = PIPE
+      elseif ch == "!" then
+	 add1()
+	 state = EXCLAMATION
       else
 	 add1()
 	 state = DONE
@@ -383,6 +387,14 @@ function lexit.lex(program)
       end
    end
 
+   local function handle_EXCLAMATION()
+      if ch == "=" then
+	 add1()
+      end
+      state = DONE
+      category = lexit.OP
+   end
+
    -- ***** Table of State-Handler Functions *****
 
    handlers = {
@@ -395,6 +407,7 @@ function lexit.lex(program)
       [STRING]=handle_STRING,
       [AMPERSAND]=handle_AMPERSAND,
       [PIPE]=handle_PIPE,
+      [EXCLAMATION]=handle_EXCLAMATION,
    }
 
    -- ***** Iterator Function *****
