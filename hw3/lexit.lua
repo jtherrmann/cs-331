@@ -210,34 +210,21 @@ function lexit.lex(program)
         drop1()
     end
 
-    -- TODO: change comment syntax here
-
     -- skipWhitespace
     -- Skip whitespace and comments, moving pos to the beginning of
     -- the next lexeme, or to program:len()+1.
     local function skipWhitespace()
-        while true do      -- In whitespace
-            while isWhitespace(currChar()) do
-                drop1()
-            end
+       while isWhitespace(currChar()) do
+	  drop1()
+       end
 
-            if currChar() ~= "/" or nextChar() ~= "*" then  -- Comment?
-                break
-            end
-            drop1()
-            drop1()
-
-            while true do  -- In comment
-                if currChar() == "*" and nextChar() == "/" then
-                    drop1()
-                    drop1()
-                    break
-                elseif currChar() == "" then  -- End of input?
-                   return
-                end
-                drop1()
-            end
-        end
+       if currChar() == "#" then
+	  drop1()
+	  while currChar() ~= "\n" and currChar() ~= "" do
+	     drop1()
+	  end
+	  skipWhitespace()
+       end
     end
 
     -- ***** State-Handler Functions *****
