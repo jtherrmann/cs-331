@@ -1,0 +1,5 @@
+echo "Passed: "
+lua5.3 lexit_test.lua | grep -o passed | wc -l
+echo
+echo "Failed: "
+lua5.3 lexit_test.lua | grep -o FAILED | wc -l
