@@ -271,8 +271,10 @@ function lexit.lex(program)
             add1()
         else
             state = DONE
-            if lexstr == "begin" or lexstr == "end"
-              or lexstr == "print" then
+	    if lexstr == "cr" or lexstr == "def" or lexstr == "else"
+	    or lexstr == "elseif" or lexstr == "end" or lexstr == "false"
+	    or lexstr == "if" or lexstr == "readnum" or lexstr == "return"
+	    or lexstr == "true" or lexstr == "while" or lexstr == "write" then
                 category = lexit.KEY
             else
                 category = lexit.ID
