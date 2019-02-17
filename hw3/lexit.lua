@@ -176,10 +176,9 @@ function lexit.lex(program)
    local START          = 1
    local LETTER         = 2
    local DIGIT          = 3
-   local PLUS           = 4
-   local MINUS          = 5
-   local EXPONENT       = 6
-   local STRING         = 7
+   local PLUS_MINUS     = 4
+   local EXPONENT       = 5
+   local STRING         = 6
 
    -- ***** Character-Related Utility Functions *****
 
@@ -269,12 +268,9 @@ function lexit.lex(program)
       elseif isDigit(ch) then
 	 add1()
 	 state = DIGIT
-      elseif ch == "+" then
+      elseif ch == "+" or ch == "-" then
 	 add1()
-	 state = PLUS
-      elseif ch == "-" then
-	 add1()
-	 state = MINUS
+	 state = PLUS_MINUS
       elseif ch == "'" or ch == '"' then
 	 endquote = ch
 	 add1()
@@ -321,17 +317,7 @@ function lexit.lex(program)
       end
    end
 
-   local function handle_PLUS()
-      if isDigit(ch) and not maximalMunchSpecialCase() then
-	 add1()
-	 state = DIGIT
-      else
-	 state = DONE
-	 category = lexit.OP
-      end
-   end
-
-   local function handle_MINUS()
+   local function handle_PLUS_MINUS()
       if isDigit(ch) and not maximalMunchSpecialCase() then
 	 add1()
 	 state = DIGIT
@@ -374,8 +360,7 @@ function lexit.lex(program)
       [START]=handle_START,
       [LETTER]=handle_LETTER,
       [DIGIT]=handle_DIGIT,
-      [PLUS]=handle_PLUS,
-      [MINUS]=handle_MINUS,
+      [PLUS_MINUS]=handle_PLUS_MINUS,
       [EXPONENT]=handle_EXPONENT,
       [STRING]=handle_STRING,
    }
