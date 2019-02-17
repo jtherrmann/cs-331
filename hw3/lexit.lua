@@ -1,4 +1,6 @@
 -- TODO
+-- - use linter / static analysis (check for undefined variables, cross-type
+--   comparisons, etc.)
 -- - update comments
 -- - coding standards
 -- - differences:
