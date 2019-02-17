@@ -179,6 +179,7 @@ function lexit.lex(program)
    local PLUS_MINUS     = 4
    local EXPONENT       = 5
    local STRING         = 6
+   local AMPERSAND      = 7
 
    -- ***** Character-Related Utility Functions *****
 
@@ -275,6 +276,9 @@ function lexit.lex(program)
 	 endquote = ch
 	 add1()
 	 state = STRING
+      elseif ch == "&" then
+	 add1()
+	 state = AMPERSAND
       else
 	 add1()
 	 state = DONE
@@ -353,6 +357,17 @@ function lexit.lex(program)
       end
    end
 
+   local function handle_AMPERSAND()
+      if ch == "&" then
+	 add1()
+	 state = DONE
+	 category = lexit.OP
+      else
+	 state = DONE
+	 category = lexit.PUNCT
+      end
+   end
+
    -- ***** Table of State-Handler Functions *****
 
    handlers = {
@@ -363,6 +378,7 @@ function lexit.lex(program)
       [PLUS_MINUS]=handle_PLUS_MINUS,
       [EXPONENT]=handle_EXPONENT,
       [STRING]=handle_STRING,
+      [AMPERSAND]=handle_AMPERSAND,
    }
 
    -- ***** Iterator Function *****
