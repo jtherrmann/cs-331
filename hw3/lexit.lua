@@ -287,6 +287,10 @@ function lexit.lex(program)
       elseif ch == "=" or ch == "!" or ch == "<" or ch == ">" then
 	 add1()
 	 state = EQUALS
+      elseif ch == "*" or ch == "/" or ch == "%" or ch == "[" or ch == "]" then
+	 add1()
+	 state = DONE
+	 category = lexit.OP
       else
 	 add1()
 	 state = DONE
