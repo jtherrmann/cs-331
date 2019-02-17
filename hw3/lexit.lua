@@ -289,11 +289,7 @@ function lexit.lex(program)
    end
 
    local function handle_PLUS()
-      if ch == "+" or ch == "=" then
-	 add1()
-	 state = DONE
-	 category = lexit.OP
-      elseif isDigit(ch) then
+      if isDigit(ch) then
 	 add1()
 	 state = DIGIT
       else
@@ -303,11 +299,7 @@ function lexit.lex(program)
    end
 
    local function handle_MINUS()
-      if ch == "-" or ch == "=" then
-	 add1()
-	 state = DONE
-	 category = lexit.OP
-      elseif isDigit(ch) then
+      if isDigit(ch) then
 	 add1()
 	 state = DIGIT
       else
