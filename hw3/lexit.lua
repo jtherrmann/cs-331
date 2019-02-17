@@ -168,6 +168,7 @@ function lexit.lex(program)
    local lexstr    -- The lexeme, so far
    local category  -- Category of lexeme, set when state set to DONE
    local handlers  -- Dispatch table; value created later
+   local endquote  -- TODO: comments
 
    -- ***** States *****
 
@@ -179,6 +180,7 @@ function lexit.lex(program)
    local MINUS          = 5
    local STAR           = 6
    local EXPONENT       = 7
+   local STRING         = 8
 
    -- ***** Character-Related Utility Functions *****
 
@@ -277,6 +279,10 @@ function lexit.lex(program)
       elseif ch == "*" or ch == "/" or ch == "=" then
 	 add1()
 	 state = STAR
+      elseif ch == "'" or ch == '"' then
+	 endquote = ch
+	 add1()
+	 state = STRING
       else
 	 add1()
 	 state = DONE
@@ -358,7 +364,16 @@ function lexit.lex(program)
 	 category = lexit.NUMLIT
       end
    end
-   
+
+   local function handle_STRING()
+      if ch == endquote then
+	 add1()
+	 state = DONE
+	 category = lexit.STRLIT
+      else
+	 add1()
+      end
+   end
 
    -- ***** Table of State-Handler Functions *****
 
@@ -371,6 +386,7 @@ function lexit.lex(program)
       [MINUS]=handle_MINUS,
       [STAR]=handle_STAR,
       [EXPONENT]=handle_EXPONENT,
+      [STRING]=handle_STRING,
    }
 
    -- ***** Iterator Function *****
