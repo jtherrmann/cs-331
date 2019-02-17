@@ -40,9 +40,10 @@ local lexit = {}  -- Our module; members are added below
 lexit.KEY    = 1
 lexit.ID     = 2
 lexit.NUMLIT = 3
-lexit.OP     = 4
-lexit.PUNCT  = 5
-lexit.MAL    = 6
+lexit.STRLIT = 4
+lexit.OP     = 5
+lexit.PUNCT  = 6
+lexit.MAL    = 7
 
 
 -- catnames
@@ -52,6 +53,7 @@ lexit.catnames = {
     "Keyword",
     "Identifier",
     "NumericLiteral",
+    "StringLiteral",
     "Operator",
     "Punctuation",
     "Malformed"
