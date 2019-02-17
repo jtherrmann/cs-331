@@ -3,7 +3,6 @@
 -- - coding standards
 -- - differences:
 --   - whitespace: StringLiteral may contain whitespace
---   - comment: completely different
 --   - legal: legal chars outside comments *and StringLiteral lexemes*
 --   - maximal munch: there's an exception to the rule
 --   - lexeme categories: adds StringLiteral
