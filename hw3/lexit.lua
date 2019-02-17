@@ -365,13 +365,15 @@ function lexit.lex(program)
       end
    end
 
-   -- TODO: check if ends on newline (and include it in the malformed lexeme);
-   -- but see if it shows up as a test first
    local function handle_STRING()
       if ch == endquote then
 	 add1()
 	 state = DONE
 	 category = lexit.STRLIT
+      elseif ch == "\n" then
+	 add1()
+	 state = DONE
+	 category = lexit.MAL
       elseif ch == "" then
 	 state = DONE
 	 category = lexit.MAL
