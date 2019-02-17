@@ -196,6 +196,14 @@ function lexit.lex(program)
       return program:sub(pos+1, pos+1)
    end
 
+   -- nextNextChar
+   -- Return the character after the next character, at index pos+2 in program.
+   -- Return value is a single-character string, or the empty string if pos+2
+   -- is past the end.
+   local function nextNextChar()
+      return program:sub(pos+2, pos+2)
+   end
+
    -- drop1
    -- Move pos to the next character.
    local function drop1()
@@ -285,6 +293,12 @@ function lexit.lex(program)
 	 add1()
       elseif (ch == "e" or ch == "E") and isDigit(nextChar()) then
 	 add1()  -- add e/E to lexeme
+	 add1()  -- add digit to lexeme (optional)
+	 state = EXPONENT
+      elseif (ch == "e" or ch == "E") and nextChar() == "+"
+      and isDigit(nextNextChar()) then
+	 add1()  -- add e/E to lexeme
+	 add1()  -- add + to lexeme
 	 add1()  -- add digit to lexeme (optional)
 	 state = EXPONENT
       else
