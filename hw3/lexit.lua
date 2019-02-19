@@ -1,36 +1,10 @@
--- TODO
--- - ask chappell if arbitrary-length lookahead is allowed
--- - search for TODO in file
--- - use linter / static analysis (check for undefined variables, cross-type
---   comparisons, etc.)
--- - update comments
--- - coding standards
--- - exercise A (forth)
--- - re-read project reqs
-
--- lexer.lua
--- VERSION 3
--- Glenn G. Chappell
--- Started: 6 Feb 2019
--- Updated: 8 Feb 2019
+-- lexit.lua
+-- Jake Herrmann
+-- 18 Feb 2019
+-- CS 331 Spring 2019
 --
--- For CS F331 / CSCE A331 Spring 2019
--- In-Class Lexer Module
-
--- History:
---   v1. Framework written. Lexer treats every character as punctuation.
---   v2. Add states LETTER, DIGIT, DIGDOT, with handlers. Write
---       skipWhitespace. Add utility function nextChar.
---   v3. Finished (hopefully). Add states DOT, PLUS, MINUS, STAR.
-
--- Usage:
---
---    program = "print a+b;"  -- program to lex
---    for lexstr, cat in lexer.lex(program) do
---        -- lexstr is the string form of a lexeme.
---        -- cat is a number representing the lexeme category.
---        --  It can be used as an index for array lexer.catnames
---    end
+-- lexit module for Assignment 3.
+-- Based on the lexer module by Glenn G. Chappell.
 
 
 -- *********************************************************************
@@ -38,7 +12,7 @@
 -- *********************************************************************
 
 
-local lexit = {}  -- Our module; members are added below
+local lexit = {}
 
 
 -- *********************************************************************
@@ -143,16 +117,16 @@ end
 -- lex
 -- Our lexer
 -- Intended for use in a for-in loop:
---     for lexstr, cat in lexer.lex(program) do
+--     for lexstr, cat in lexit.lex(program) do
 -- Here, lexstr is the string form of a lexeme, and cat is a number
 -- representing a lexeme category. (See Public Constants.)
 function lexit.lex(program)
-   -- ***** Variables (like class data members) *****
+   -- ***** Variables *****
 
-   local pos       -- Index of next character in program
-   -- INVARIANT: when getLexeme is called, pos is
-   --  EITHER the index of the first character of the
-   --  next lexeme OR program:len()+1
+   local pos         -- Index of next character in program
+                     -- INVARIANT: when getLexeme is called, pos is
+                     --  EITHER the index of the first character of the
+                     --  next lexeme OR program:len()+1
    local state       -- Current state for our state machine
    local ch          -- Current character
    local lexstr      -- The lexeme, so far
@@ -244,14 +218,15 @@ function lexit.lex(program)
 
    -- ***** State-Handler Functions *****
 
-   -- A function with a name like handle_XYZ is the handler function
-   -- for state XYZ
-
+   -- handle_DONE
+   -- Handle the DONE state by crashing.
    local function handle_DONE()
       io.write("ERROR: 'DONE' state should not be handled\n")
-      assert(0)
+      assert(false)
    end
 
+   -- handle_START
+   -- Handle the START state.
    local function handle_START()
       if isIllegal(ch) then
 	 add1()
@@ -290,6 +265,8 @@ function lexit.lex(program)
       end
    end
 
+   -- handle_LETTER
+   -- Handle the LETTER state.
    local function handle_LETTER()
       if isLetter(ch) or isDigit(ch) or ch == "_" then
 	 add1()
@@ -306,6 +283,8 @@ function lexit.lex(program)
       end
    end
 
+   -- handle_DIGIT
+   -- Handle the DIGIT state.
    local function handle_DIGIT()
       if isDigit(ch) then
 	 add1()
@@ -325,6 +304,8 @@ function lexit.lex(program)
       end
    end
 
+   -- handle_PLUS_MINUS
+   -- Handle the PLUS_MINUS state.
    local function handle_PLUS_MINUS()
       if isDigit(ch) and not maximalMunchSpecialCase() then
 	 add1()
@@ -335,6 +316,8 @@ function lexit.lex(program)
       end
    end
 
+   -- handle_EXPONENT
+   -- Handle the EXPONENT state.
    local function handle_EXPONENT()
       if isDigit(ch) then
 	 add1()
@@ -344,6 +327,8 @@ function lexit.lex(program)
       end
    end
 
+   -- handle_STRING
+   -- Handle the STRING state.
    local function handle_STRING()
       if ch == strQuote then
 	 add1()
@@ -361,6 +346,8 @@ function lexit.lex(program)
       end
    end
 
+   -- handle_AMPERSAND
+   -- Handle the AMPERSAND state.
    local function handle_AMPERSAND()
       if ch == "&" then
 	 add1()
@@ -372,6 +359,8 @@ function lexit.lex(program)
       end
    end
 
+   -- handle_PIPE
+   -- Handle the PIPE state.
    local function handle_PIPE()
       if ch == "|" then
 	 add1()
@@ -383,6 +372,8 @@ function lexit.lex(program)
       end
    end
 
+   -- handle_EQUALS
+   -- Handle the EQUALS state.
    local function handle_EQUALS()
       if ch == "=" then
 	 add1()
