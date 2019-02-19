@@ -4,7 +4,8 @@
 -- CS 331 Spring 2019
 --
 -- lexit module for Assignment 3.
--- Based on the lexer module by Glenn G. Chappell.
+-- The lexit module is a modified version of the lexer module by Glenn G.
+-- Chappell.
 
 
 -- *********************************************************************
