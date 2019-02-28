@@ -1,5 +1,5 @@
 echo "Passed: "
-lua5.3 all_tests.lua | grep -o passed | wc -l
+lua5.3 all_lexit_tests.lua | grep -o passed | wc -l
 echo
 echo "Failed: "
-lua5.3 all_tests.lua | grep -o FAILED | wc -l
+lua5.3 all_lexit_tests.lua | grep -o FAILED | wc -l
