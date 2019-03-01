@@ -85,7 +85,12 @@ end
 function parseStmtList()
    local ast = {STMT_LIST}
    while not lexIsDone() do
-      local statement = parseStatement()
+      local statement, isNotStatement = parseStatement()
+      if isNotStatement then
+	 assert(statement == nil)
+	 break
+      end
+      assert(isNotStatement == nil)
       if statement == nil then
 	 return nil
       end
@@ -134,7 +139,11 @@ function parseStatement()
       -- TODO: add any number of more args
       return ast
    end
-   return nil -- TODO: dummy; parse more kinds of statements
+   if lexCat == lexit.ID then
+      lexNext()
+      return nil
+   end
+   return nil, true
 end
 
 
