@@ -136,8 +136,7 @@ function parseStmtList(lexer)
       if statement == nil then
 	 return nil
       end
-      -- TODO: factor out append function
-      ast[#ast+1] = statement
+      append(ast, statement)
    end
    return ast
 end
