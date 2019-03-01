@@ -102,6 +102,7 @@ local ARRAY_VAR    = 17
 -- TODO: check that these are all here
 local parseStmtList
 local parseStatement
+local parseWriteStatement
 local parseWriteArg
 
 local beginsStatement
@@ -138,43 +139,49 @@ function beginsStatement(lexStr, lexCat)
 end
 
 
--- TODO: factor out a parse function for each kind of statement
 function parseStatement(lexer)
    local ast
-   if lexer:matchStr('write') then
-      if not lexer:matchStr('(') then
+   if lexer:str() == 'write' then
+      ast = parseWriteStatement(lexer)
+   elseif lexer:matchCat(lexit.ID) then
+      -- TODO
+      ast = nil
+   end
+   return ast
+end
+
+
+function parseWriteStatement(lexer)
+   assert(lexer:matchStr('write'))
+
+   if not lexer:matchStr('(') then
+      return nil
+   end
+   local ast = {WRITE_STMT}
+
+   -- TODO: DRY if possible
+   local writeArg = parseWriteArg(lexer)
+   if writeArg == nil then
+      return nil
+   end
+   append(ast, writeArg)
+
+   while lexer:str() ~= ')' do
+      if not lexer:matchStr(',') then
 	 return nil
       end
-      ast = {WRITE_STMT}
 
-      -- TODO: DRY if possible
-      local writeArg = parseWriteArg(lexer)
+      writeArg = parseWriteArg(lexer)
       if writeArg == nil then
 	 return nil
       end
       append(ast, writeArg)
 
-      while lexer:str() ~= ')' do
-	 if not lexer:matchStr(',') then
-	    return nil
-	 end
-
-	 writeArg = parseWriteArg(lexer)
-	 if writeArg == nil then
-	    return nil
-	 end
-	 append(ast, writeArg)
-
-      end
-      if not lexer:matchStr(')') then
-	 return nil
-      end
-      return ast
    end
-   if lexer:matchCat(lexit.ID) then
+   if not lexer:matchStr(')') then
       return nil
    end
-   return nil
+   return ast
 end
 
 
