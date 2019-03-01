@@ -41,6 +41,13 @@ function Lexer.cat(self)
 end
 
 
+function Lexer.popStr(self)
+   local str = self:str()
+   self:next()
+   return str
+end
+
+
 function Lexer.next(self)
    self._str, self._cat = self:_iter()
 end
@@ -176,8 +183,7 @@ function parseWriteArg(lexer)
       ast = {CR_OUT}
       lexer:next()
    elseif lexer:cat() == lexit.STRLIT then
-      ast = {STRLIT_OUT, lexer:str()}
-      lexer:next()
+      ast = {STRLIT_OUT, lexer:popStr()}
    end
    return ast -- TODO: parse more kinds of write args
 end
