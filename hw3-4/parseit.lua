@@ -2,6 +2,7 @@
 -- - TODO throughout file
 -- - linter (e.g. for checking undefined vars, missing "local"s)
 -- - remove prints
+-- - factor out matchString/matchCat functions? (see rdparser4.lua)
 
 local parseit = {}
 
