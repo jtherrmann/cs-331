@@ -100,7 +100,6 @@ local SIMPLE_VAR   = 16
 local ARRAY_VAR    = 17
 
 -- TODO: check that these are all here
-local parseProgram
 local parseStmtList
 local parseStatement
 local parseWriteArg
@@ -115,14 +114,8 @@ end
 
 function parseit.parse(input)
    local lexer = Lexer.new(input)
-   local ast = parseProgram(lexer)
+   local ast = parseStmtList(lexer)
    return ast ~= nil, lexer:isDone(), ast
-end
-
-
--- TODO: unnecessary?
-function parseProgram(lexer)
-   return parseStmtList(lexer)
 end
 
 
