@@ -124,10 +124,13 @@ function parseWriteArg()
    local ast
    -- TODO: check lexCat as well?
    if lexStr == 'cr' then
+      ast = {CR_OUT}
       lexNext()
-      return {CR_OUT}
+   elseif lexCat == lexit.STRLIT then
+      ast = {STRLIT_OUT, lexStr}
+      lexNext()
    end
-   return nil -- TODO: dummy; parse more kinds of write args
+   return ast -- TODO: parse more kinds of write args
 end
 
 
