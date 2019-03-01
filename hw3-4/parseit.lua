@@ -57,6 +57,15 @@ function Lexer.matchStr(self, str)
 end
 
 
+function Lexer.matchCat(self, cat)
+   if cat == self:cat() then
+      self:next()
+      return true
+   end
+   return false
+end
+
+
 function Lexer.next(self)
    self._str, self._cat = self:_iter()
 end
@@ -173,8 +182,7 @@ function parseStatement(lexer)
       -- TODO: add any number of more args
       return ast
    end
-   if lexer:cat() == lexit.ID then
-      lexer:next()
+   if lexer:matchCat(lexit.ID) then
       return nil
    end
    return nil, true
