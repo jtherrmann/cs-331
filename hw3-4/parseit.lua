@@ -105,15 +105,31 @@ function parseStatement()
       end
       lexNext()
       ast = {WRITE_STMT}
+
+      -- TODO: DRY if possible
       local writeArg = parseWriteArg()
       if writeArg == nil then
 	 return nil
+      end
+      append(ast, writeArg)
+
+      while lexStr ~= ')' do
+	 if lexStr ~= ',' then
+	    return nil
+	 end
+	 lexNext()
+
+	 writeArg = parseWriteArg()
+	 if writeArg == nil then
+	    return nil
+	 end
+	 append(ast, writeArg)
+
       end
       if lexStr ~= ')' then
 	 return nil
       end
       lexNext()
-      append(ast, writeArg)
       -- TODO: add any number of more args
       return ast
    end
