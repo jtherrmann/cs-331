@@ -48,6 +48,15 @@ function Lexer.popStr(self)
 end
 
 
+function Lexer.matchStr(self, str)
+   if str == self:str() then
+      self:next()
+      return true
+   end
+   return false
+end
+
+
 function Lexer.next(self)
    self._str, self._cat = self:_iter()
 end
@@ -133,12 +142,10 @@ end
 function parseStatement(lexer)
    local ast
    -- TODO: check lexer:cat() as well?
-   if lexer:str() == 'write' then
-      lexer:next()
-      if lexer:str() ~= '(' then
+   if lexer:matchStr('write') then
+      if not lexer:matchStr('(') then
 	 return nil
       end
-      lexer:next()
       ast = {WRITE_STMT}
 
       -- TODO: DRY if possible
@@ -149,10 +156,9 @@ function parseStatement(lexer)
       append(ast, writeArg)
 
       while lexer:str() ~= ')' do
-	 if lexer:str() ~= ',' then
+	 if not lexer:matchStr(',') then
 	    return nil
 	 end
-	 lexer:next()
 
 	 writeArg = parseWriteArg(lexer)
 	 if writeArg == nil then
@@ -161,10 +167,9 @@ function parseStatement(lexer)
 	 append(ast, writeArg)
 
       end
-      if lexer:str() ~= ')' then
+      if not lexer:matchStr(')') then
 	 return nil
       end
-      lexer:next()
       -- TODO: add any number of more args
       return ast
    end
@@ -179,9 +184,8 @@ end
 function parseWriteArg(lexer)
    local ast
    -- TODO: check lexer:cat() as well?
-   if lexer:str() == 'cr' then
+   if lexer:matchStr('cr') then
       ast = {CR_OUT}
-      lexer:next()
    elseif lexer:cat() == lexit.STRLIT then
       ast = {STRLIT_OUT, lexer:popStr()}
    end
