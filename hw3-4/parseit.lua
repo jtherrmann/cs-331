@@ -1,3 +1,7 @@
+-- TODO:
+-- - TODO throughout file
+-- - linter (e.g. for checking undefined vars, missing "local"s)
+
 local parseit = {}
 
 local lexit = require "lexit"
@@ -7,8 +11,19 @@ local lexStr
 local lexCat
 
 
+-- TODO: comment that lexInit must be called before this function is called
 local function lexNext()
    lexStr, lexCat = lexIter()
+end
+
+
+-- TODO: comment that lexInit must be called before this function is called
+local function lexIsDone(input)
+   if lexStr == nil then
+      assert(lexCat == nil)
+      return true
+   end
+   return false
 end
 
 
@@ -21,18 +36,42 @@ end
 -- AST constants
 local STMT_LIST = 1
 
+-- TODO: check that these are all here
 local parseProgram
+local parseStmtList
+local parseStatement
 
 
 function parseit.parse(input)
    lexInit(input)
-   return parseProgram()
+   local ast = parseProgram()
+   return ast ~= nil, lexIsDone(), ast
 end
 
 
 function parseProgram()
-   return true, true, {STMT_LIST}
+   return parseStmtList()
 end
-   
+
+
+function parseStmtList()
+   local ast = {STMT_LIST}
+   while not lexIsDone() do
+      local statement = parseStatement()
+      if statement == nil then
+	 return nil
+      end
+      -- TODO: factor out append function
+      ast[#ast+1] = statement
+   end
+   return ast
+end
+
+
+function parseStatement()
+   lexNext()
+   return {}
+end
+
 
 return parseit
