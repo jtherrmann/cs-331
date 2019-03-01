@@ -34,7 +34,23 @@ end
 
 
 -- AST constants
-local STMT_LIST = 1
+local STMT_LIST    = 1
+local WRITE_STMT   = 2
+local FUNC_DEF     = 3
+local FUNC_CALL    = 4
+local IF_STMT      = 5
+local WHILE_STMT   = 6
+local RETURN_STMT  = 7
+local ASSN_STMT    = 8
+local CR_OUT       = 9
+local STRLIT_OUT   = 10
+local BIN_OP       = 11
+local UN_OP        = 12
+local NUMLIT_VAL   = 13
+local BOOLLIT_VAL  = 14
+local READNUM_CALL = 15
+local SIMPLE_VAR   = 16
+local ARRAY_VAR    = 17
 
 -- TODO: check that these are all here
 local parseProgram
