@@ -9,30 +9,49 @@ local parseit = {}
 
 local lexit = require "lexit"
 
-local lexIter
-local lexStr
-local lexCat
+
+-- TODO: invariants
+local Lexer = {}
 
 
--- TODO: comment that lexInit must be called before this function is called
-local function lexNext()
-   lexStr, lexCat = lexIter()
+-- TODO: confirm Lexer functions don't need to be local
+
+
+function Lexer.__index(tbl, key)
+   return Lexer[key]
 end
 
 
--- TODO: comment that lexInit must be called before this function is called
-local function lexIsDone(input)
-   if lexStr == nil then
-      assert(lexCat == nil)
+function Lexer.new(input)
+   local obj = {}
+   setmetatable(obj, Lexer)
+   obj._iter = lexit.lex(input)
+   obj:next()
+   return obj
+end
+
+
+function Lexer.str(self)
+   return self._str
+end
+
+
+function Lexer.cat(self)
+   return self._cat
+end
+
+
+function Lexer.next(self)
+   self._str, self._cat = self:_iter()
+end
+
+
+function Lexer.isDone(self)
+   if self:str() == nil then
+      assert(self:cat() == nil)
       return true
    end
    return false
-end
-
-
-local function lexInit(input)
-   lexIter = lexit.lex(input)
-   lexNext()
 end
 
 
@@ -71,24 +90,24 @@ end
 
 
 function parseit.parse(input)
-   lexInit(input)
-   local ast = parseProgram()
-   return ast ~= nil, lexIsDone(), ast
+   local lexer = Lexer.new(input)
+   local ast = parseProgram(lexer)
+   return ast ~= nil, lexer:isDone(), ast
 end
 
 
 -- TODO: unnecessary?
-function parseProgram()
-   return parseStmtList()
+function parseProgram(lexer)
+   return parseStmtList(lexer)
 end
 
 
 -- TODO: only call parseStatement if next token starts a statement; then will
 -- not need to return extra bool flag from parseStatement
-function parseStmtList()
+function parseStmtList(lexer)
    local ast = {STMT_LIST}
-   while not lexIsDone() do
-      local statement, isNotStatement = parseStatement()
+   while not lexer:isDone() do
+      local statement, isNotStatement = parseStatement(lexer)
       if isNotStatement then
 	 assert(statement == nil)
 	 break
@@ -104,61 +123,61 @@ function parseStmtList()
 end
 
 
-function parseStatement()
+function parseStatement(lexer)
    local ast
-   -- TODO: check lexCat as well?
-   if lexStr == 'write' then
-      lexNext()
-      if lexStr ~= '(' then
+   -- TODO: check lexer:cat() as well?
+   if lexer:str() == 'write' then
+      lexer:next()
+      if lexer:str() ~= '(' then
 	 return nil
       end
-      lexNext()
+      lexer:next()
       ast = {WRITE_STMT}
 
       -- TODO: DRY if possible
-      local writeArg = parseWriteArg()
+      local writeArg = parseWriteArg(lexer)
       if writeArg == nil then
 	 return nil
       end
       append(ast, writeArg)
 
-      while lexStr ~= ')' do
-	 if lexStr ~= ',' then
+      while lexer:str() ~= ')' do
+	 if lexer:str() ~= ',' then
 	    return nil
 	 end
-	 lexNext()
+	 lexer:next()
 
-	 writeArg = parseWriteArg()
+	 writeArg = parseWriteArg(lexer)
 	 if writeArg == nil then
 	    return nil
 	 end
 	 append(ast, writeArg)
 
       end
-      if lexStr ~= ')' then
+      if lexer:str() ~= ')' then
 	 return nil
       end
-      lexNext()
+      lexer:next()
       -- TODO: add any number of more args
       return ast
    end
-   if lexCat == lexit.ID then
-      lexNext()
+   if lexer:cat() == lexit.ID then
+      lexer:next()
       return nil
    end
    return nil, true
 end
 
 
-function parseWriteArg()
+function parseWriteArg(lexer)
    local ast
-   -- TODO: check lexCat as well?
-   if lexStr == 'cr' then
+   -- TODO: check lexer:cat() as well?
+   if lexer:str() == 'cr' then
       ast = {CR_OUT}
-      lexNext()
-   elseif lexCat == lexit.STRLIT then
-      ast = {STRLIT_OUT, lexStr}
-      lexNext()
+      lexer:next()
+   elseif lexer:cat() == lexit.STRLIT then
+      ast = {STRLIT_OUT, lexer:str()}
+      lexer:next()
    end
    return ast -- TODO: parse more kinds of write args
 end
