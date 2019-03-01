@@ -149,6 +149,7 @@ function beginsStatement(lexStr, lexCat)
 end
 
 
+-- TODO: factor out a parse function for each kind of statement
 function parseStatement(lexer)
    local ast
    -- TODO: check lexer:cat() as well?
@@ -180,7 +181,6 @@ function parseStatement(lexer)
       if not lexer:matchStr(')') then
 	 return nil
       end
-      -- TODO: add any number of more args
       return ast
    end
    if lexer:matchCat(lexit.ID) then
