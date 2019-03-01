@@ -157,29 +157,23 @@ function parseWriteStatement(lexer)
    if not lexer:matchStr('(') then
       return nil
    end
+
    local ast = {WRITE_STMT}
+   local done = false
+   local writeArg
 
-   -- TODO: DRY if possible
-   local writeArg = parseWriteArg(lexer)
-   if writeArg == nil then
-      return nil
-   end
-   append(ast, writeArg)
-
-   while lexer:str() ~= ')' do
-      if not lexer:matchStr(',') then
-	 return nil
-      end
-
+   while not done do
       writeArg = parseWriteArg(lexer)
       if writeArg == nil then
 	 return nil
       end
       append(ast, writeArg)
 
-   end
-   if not lexer:matchStr(')') then
-      return nil
+      if lexer:matchStr(')') then
+	 done = true
+      elseif not lexer:matchStr(',') then
+	 return nil
+      end
    end
    return ast
 end
