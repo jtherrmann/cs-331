@@ -108,9 +108,6 @@ local parseWriteArg
 local beginsStatement
 
 
--- TODO: factor out a pop token function of some sort?
-
-
 local function append(t, item)
    t[#t+1] = item
 end
@@ -151,7 +148,6 @@ end
 -- TODO: factor out a parse function for each kind of statement
 function parseStatement(lexer)
    local ast
-   -- TODO: check lexer:cat() as well?
    if lexer:matchStr('write') then
       if not lexer:matchStr('(') then
 	 return nil
@@ -191,7 +187,6 @@ end
 
 function parseWriteArg(lexer)
    local ast
-   -- TODO: check lexer:cat() as well?
    if lexer:matchStr('cr') then
       ast = {CR_OUT}
    elseif lexer:cat() == lexit.STRLIT then
