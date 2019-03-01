@@ -76,6 +76,7 @@ function parseit.parse(input)
 end
 
 
+-- TODO: unnecessary?
 function parseProgram()
    return parseStmtList()
 end
