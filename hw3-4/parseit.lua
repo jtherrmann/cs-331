@@ -82,6 +82,8 @@ function parseProgram()
 end
 
 
+-- TODO: only call parseStatement if next token starts a statement; then will
+-- not need to return extra bool flag from parseStatement
 function parseStmtList()
    local ast = {STMT_LIST}
    while not lexIsDone() do
