@@ -1,6 +1,7 @@
 -- TODO:
 -- - TODO throughout file
 -- - linter (e.g. for checking undefined vars, missing "local"s)
+-- - remove prints
 
 local parseit = {}
 
@@ -56,6 +57,15 @@ local ARRAY_VAR    = 17
 local parseProgram
 local parseStmtList
 local parseStatement
+local parseWriteArg
+
+
+-- TODO: factor out a pop token function of some sort?
+
+
+local function append(t, item)
+   t[#t+1] = item
+end
 
 
 function parseit.parse(input)
@@ -85,8 +95,39 @@ end
 
 
 function parseStatement()
-   lexNext()
-   return {}
+   local ast
+   -- TODO: check lexCat as well?
+   if lexStr == 'write' then
+      lexNext()
+      if lexStr ~= '(' then
+	 return nil
+      end
+      lexNext()
+      ast = {WRITE_STMT}
+      local writeArg = parseWriteArg()
+      if writeArg == nil then
+	 return nil
+      end
+      if lexStr ~= ')' then
+	 return nil
+      end
+      lexNext()
+      append(ast, writeArg)
+      -- TODO: add any number of more args
+      return ast
+   end
+   return nil -- TODO: dummy; parse more kinds of statements
+end
+
+
+function parseWriteArg()
+   local ast
+   -- TODO: check lexCat as well?
+   if lexStr == 'cr' then
+      lexNext()
+      return {CR_OUT}
+   end
+   return nil -- TODO: dummy; parse more kinds of write args
 end
 
 
