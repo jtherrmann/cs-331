@@ -26,7 +26,7 @@ function Lexer.new(input)
    local obj = {}
    setmetatable(obj, Lexer)
    obj._iter = lexit.lex(input)
-   obj:next()
+   obj:_next()
    return obj
 end
 
@@ -43,14 +43,14 @@ end
 
 function Lexer.popStr(self)
    local str = self:str()
-   self:next()
+   self:_next()
    return str
 end
 
 
 function Lexer.matchStr(self, str)
    if str == self:str() then
-      self:next()
+      self:_next()
       return true
    end
    return false
@@ -59,15 +59,10 @@ end
 
 function Lexer.matchCat(self, cat)
    if cat == self:cat() then
-      self:next()
+      self:_next()
       return true
    end
    return false
-end
-
-
-function Lexer.next(self)
-   self._str, self._cat = self:_iter()
 end
 
 
@@ -77,6 +72,11 @@ function Lexer.isDone(self)
       return true
    end
    return false
+end
+
+
+function Lexer._next(self)
+   self._str, self._cat = self:_iter()
 end
 
 
