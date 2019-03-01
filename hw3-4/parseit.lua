@@ -105,6 +105,8 @@ local parseStmtList
 local parseStatement
 local parseWriteArg
 
+local beginsStatement
+
 
 -- TODO: factor out a pop token function of some sort?
 
@@ -127,17 +129,10 @@ function parseProgram(lexer)
 end
 
 
--- TODO: only call parseStatement if next token starts a statement; then will
--- not need to return extra bool flag from parseStatement
 function parseStmtList(lexer)
    local ast = {STMT_LIST}
-   while not lexer:isDone() do
-      local statement, isNotStatement = parseStatement(lexer)
-      if isNotStatement then
-	 assert(statement == nil)
-	 break
-      end
-      assert(isNotStatement == nil)
+   while beginsStatement(lexer:str(), lexer:cat()) do
+      local statement = parseStatement(lexer)
       if statement == nil then
 	 return nil
       end
@@ -145,6 +140,12 @@ function parseStmtList(lexer)
       ast[#ast+1] = statement
    end
    return ast
+end
+
+
+function beginsStatement(lexStr, lexCat)
+   return lexStr == 'write' or lexStr == 'def' or lexStr == 'if'
+   or lexStr == 'while' or lexStr == 'return' or lexCat == lexit.ID
 end
 
 
@@ -185,7 +186,7 @@ function parseStatement(lexer)
    if lexer:matchCat(lexit.ID) then
       return nil
    end
-   return nil, true
+   return nil
 end
 
 
