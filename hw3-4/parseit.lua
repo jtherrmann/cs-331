@@ -231,10 +231,9 @@ function parseIfStatement(lexer)
    assert(lexer:matchStr('if'))
 
    local ast = {IF_STMT}
-   local done = false
    local expr, stmtList
 
-   while not done do
+   repeat
       expr = parseExpr(lexer)
       if expr == nil then
          return nil
@@ -246,11 +245,7 @@ function parseIfStatement(lexer)
          return nil
       end
       append(ast, stmtList)
-
-      if not lexer:matchStr('elseif') then
-         done = true
-      end
-   end
+   until not lexer:matchStr('elseif')
 
    if lexer:matchStr('else') then
       stmtList = parseStmtList(lexer)
