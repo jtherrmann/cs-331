@@ -283,11 +283,20 @@ end
 function parseIdStatement(lexer)
    assert(lexer:cat() == lexit.ID)
    local id = lexer:popStr()
+
    if lexer:matchStr('(') then
       if not lexer:matchStr(')') then
          return nil
       end
       return {FUNC_CALL, id}
+   end
+
+   if lexer:matchStr('=') then
+      local expr = parseExpr(lexer)
+      if expr == nil then
+         return nil
+      end
+      return {ASSN_STMT, {SIMPLE_VAR, id}, expr}
    end
    return nil -- TODO: parse other kinds of id statements
 end
