@@ -318,6 +318,7 @@ end
 
 
 function parseExpr(lexer)
+   -- TODO: move these to parseFactor
    if lexer:cat() == lexit.NUMLIT then
       return {NUMLIT_VAL, lexer:popStr()}
    end
