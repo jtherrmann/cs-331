@@ -104,6 +104,7 @@ local parseStmtList
 local parseStatement
 local parseWriteStatement
 local parseWriteArg
+local parseIdStatement
 
 local beginsStatement
 
@@ -143,9 +144,8 @@ function parseStatement(lexer)
    if lexer:str() == 'write' then
       return parseWriteStatement(lexer)
    end
-   if lexer:matchCat(lexit.ID) then
-      -- TODO
-      return nil
+   if lexer:cat() == lexit.ID then
+      return parseIdStatement(lexer)
    end
    return nil
 end
@@ -189,5 +189,19 @@ function parseWriteArg(lexer)
    return nil -- TODO: write args can be exprs
 end
 
+
+-- TODO: factor out a parse func call function when get to parseFactor
+function parseIdStatement(lexer)
+   assert(lexer:cat() == lexit.ID)
+   local id = lexer:popStr()
+   if lexer:matchStr('(') then
+      if not lexer:matchStr(')') then
+         return nil
+      end
+      return {FUNC_CALL, id}
+   end
+   return nil -- TODO: parse other kinds of id statements
+end
+   
 
 return parseit
