@@ -109,6 +109,7 @@ local parseIfStatement
 local parseWhileStatement
 local parseIdStatement
 local parseExpr
+local parseCompExpr
 local parseFactor
 
 local beginsStatement
@@ -318,6 +319,27 @@ end
 
 
 function parseExpr(lexer)
+   local compExpr = parseCompExpr(lexer)
+   if compExpr == nil then
+      return nil
+   end
+
+   -- TODO: allow 0 or more
+   if lexer:str() == '&&' or lexer:str() == '||' then
+      local binop = lexer:popStr()
+      local compExpr2 = parseCompExpr(lexer)
+      if compExpr2 == nil then
+         return nil
+      end
+      return {{BIN_OP, binop}, compExpr, compExpr2}
+   end
+
+   return compExpr
+end
+
+
+function parseCompExpr(lexer)
+   -- TODO
    return parseFactor(lexer)
 end
 
