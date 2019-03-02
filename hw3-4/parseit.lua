@@ -104,6 +104,7 @@ local parseStmtList
 local parseStatement
 local parseWriteStatement
 local parseWriteArg
+local parseFuncDefStatement
 local parseIdStatement
 
 local beginsStatement
@@ -143,6 +144,9 @@ end
 function parseStatement(lexer)
    if lexer:str() == 'write' then
       return parseWriteStatement(lexer)
+   end
+   if lexer:str() == 'def' then
+      return parseFuncDefStatement(lexer)
    end
    if lexer:cat() == lexit.ID then
       return parseIdStatement(lexer)
@@ -187,6 +191,30 @@ function parseWriteArg(lexer)
       return {STRLIT_OUT, lexer:popStr()}
    end
    return nil -- TODO: write args can be exprs
+end
+
+
+function parseFuncDefStatement(lexer)
+   assert(lexer:matchStr('def'))
+
+   if lexer:cat() ~= lexit.ID then
+      return nil
+   end
+   local id = lexer:popStr()
+
+   if not (lexer:matchStr('(') and lexer:matchStr(')')) then
+      return nil
+   end
+
+   local stmtList = parseStmtList(lexer)
+   if stmtList == nil then
+      return nil
+   end
+
+   if not lexer:matchStr('end') then
+      return nil
+   end
+   return {FUNC_DEF, id, stmtList}
 end
 
 
