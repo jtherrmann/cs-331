@@ -105,7 +105,9 @@ local parseStatement
 local parseWriteStatement
 local parseWriteArg
 local parseFuncDefStatement
+local parseWhileStatement
 local parseIdStatement
+local parseExpr
 
 local beginsStatement
 
@@ -147,6 +149,9 @@ function parseStatement(lexer)
    end
    if lexer:str() == 'def' then
       return parseFuncDefStatement(lexer)
+   end
+   if lexer:str() == 'while' then
+      return parseWhileStatement(lexer)
    end
    if lexer:cat() == lexit.ID then
       return parseIdStatement(lexer)
@@ -218,6 +223,26 @@ function parseFuncDefStatement(lexer)
 end
 
 
+function parseWhileStatement(lexer)
+   assert(lexer:matchStr('while'))
+
+   local expr = parseExpr(lexer)
+   if expr == nil then
+      return nil
+   end
+
+   local stmtList = parseStmtList(lexer)
+   if stmtList == nil then
+      return nil
+   end
+
+   if not lexer:matchStr('end') then
+      return nil
+   end
+   return {WHILE_STMT, expr, stmtList}
+end
+
+
 -- TODO: factor out a parse func call function when get to parseFactor
 function parseIdStatement(lexer)
    assert(lexer:cat() == lexit.ID)
@@ -229,6 +254,14 @@ function parseIdStatement(lexer)
       return {FUNC_CALL, id}
    end
    return nil -- TODO: parse other kinds of id statements
+end
+
+
+function parseExpr(lexer)
+   if lexer:cat() ~= lexit.NUMLIT then
+      return nil
+   end
+   return {NUMLIT_VAL, lexer:popStr()}
 end
    
 
