@@ -321,6 +321,9 @@ function parseExpr(lexer)
    if lexer:cat() == lexit.NUMLIT then
       return {NUMLIT_VAL, lexer:popStr()}
    end
+   if lexer:str() == 'true' or lexer:str() == 'false' then
+      return {BOOLLIT_VAL, lexer:popStr()}
+   end
    if lexer:cat() == lexit.ID then
       return {SIMPLE_VAR, lexer:popStr()}
    end
