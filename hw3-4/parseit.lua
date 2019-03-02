@@ -172,21 +172,18 @@ function parseWriteStatement(lexer)
    end
 
    local ast = {WRITE_STMT}
-   local done = false
    local writeArg
 
-   while not done do
+   repeat
       writeArg = parseWriteArg(lexer)
       if writeArg == nil then
          return nil
       end
       append(ast, writeArg)
+   until not lexer:matchStr(',')
 
-      if lexer:matchStr(')') then
-         done = true
-      elseif not lexer:matchStr(',') then
-         return nil
-      end
+   if not lexer:matchStr(')') then
+      return nil
    end
    return ast
 end
