@@ -105,6 +105,7 @@ local parseStatement
 local parseWriteStatement
 local parseWriteArg
 local parseFuncDefStatement
+local parseIfStatement
 local parseWhileStatement
 local parseIdStatement
 local parseExpr
@@ -149,6 +150,9 @@ function parseStatement(lexer)
    end
    if lexer:str() == 'def' then
       return parseFuncDefStatement(lexer)
+   end
+   if lexer:str() == 'if' then
+      return parseIfStatement(lexer)
    end
    if lexer:str() == 'while' then
       return parseWhileStatement(lexer)
@@ -220,6 +224,26 @@ function parseFuncDefStatement(lexer)
       return nil
    end
    return {FUNC_DEF, id, stmtList}
+end
+
+
+function parseIfStatement(lexer)
+   assert(lexer:matchStr('if'))
+
+   local expr = parseExpr(lexer)
+   if expr == nil then
+      return nil
+   end
+
+   local stmtList = parseStmtList(lexer)
+   if stmtList == nil then
+      return nil
+   end
+
+   if not lexer:matchStr('end') then
+      return nil
+   end
+   return {IF_STMT, expr, stmtList}
 end
 
 
