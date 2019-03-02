@@ -109,6 +109,7 @@ local parseIfStatement
 local parseWhileStatement
 local parseIdStatement
 local parseExpr
+local parseFactor
 
 local beginsStatement
 
@@ -318,7 +319,11 @@ end
 
 
 function parseExpr(lexer)
-   -- TODO: move these to parseFactor
+   return parseFactor(lexer)
+end
+
+
+function parseFactor(lexer)
    if lexer:cat() == lexit.NUMLIT then
       return {NUMLIT_VAL, lexer:popStr()}
    end
