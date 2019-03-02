@@ -282,10 +282,13 @@ end
 
 
 function parseExpr(lexer)
-   if lexer:cat() ~= lexit.NUMLIT then
-      return nil
+   if lexer:cat() == lexit.NUMLIT then
+      return {NUMLIT_VAL, lexer:popStr()}
    end
-   return {NUMLIT_VAL, lexer:popStr()}
+   if lexer:cat() == lexit.ID then
+      return {SIMPLE_VAR, lexer:popStr()}
+   end
+   return nil
 end
    
 
