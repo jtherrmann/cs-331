@@ -230,6 +230,8 @@ end
 function parseIfStatement(lexer)
    assert(lexer:matchStr('if'))
 
+   -- TODO: DRY if possible
+
    local expr = parseExpr(lexer)
    if expr == nil then
       return nil
@@ -240,10 +242,34 @@ function parseIfStatement(lexer)
       return nil
    end
 
+   local ast = {IF_STMT, expr, stmtList}
+
+   while lexer:matchStr('elseif') do
+      expr = parseExpr(lexer)
+      if expr == nil then
+         return nil
+      end
+      append(ast, expr)
+
+      stmtList = parseStmtList(lexer)
+      if stmtList == nil then
+         return nil
+      end
+      append(ast, stmtList)
+   end
+
+   if lexer:matchStr('else') then
+      stmtList = parseStmtList(lexer)
+      if stmtList == nil then
+         return nil
+      end
+      append(ast, stmtList)
+   end
+
    if not lexer:matchStr('end') then
       return nil
    end
-   return {IF_STMT, expr, stmtList}
+   return ast
 end
 
 
