@@ -291,14 +291,29 @@ function parseIdStatement(lexer)
       return {FUNC_CALL, id}
    end
 
-   if lexer:matchStr('=') then
-      local expr = parseExpr(lexer)
-      if expr == nil then
+   local var
+   if lexer:matchStr('[') then
+      local indexExpr = parseExpr(lexer)
+      if indexExpr == nil then
          return nil
       end
-      return {ASSN_STMT, {SIMPLE_VAR, id}, expr}
+      if not lexer:matchStr(']') then
+         return nil
+      end
+      var = {ARRAY_VAR, id, indexExpr}
+   else
+      var = {SIMPLE_VAR, id}
    end
-   return nil -- TODO: parse other kinds of id statements
+
+   if not lexer:matchStr('=') then
+      return nil
+   end
+
+   local expr = parseExpr(lexer)
+   if expr == nil then
+      return nil
+   end
+   return {ASSN_STMT, var, expr}
 end
 
 
