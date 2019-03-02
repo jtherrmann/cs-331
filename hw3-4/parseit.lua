@@ -125,7 +125,7 @@ function parseStmtList(lexer)
    while beginsStatement(lexer:str(), lexer:cat()) do
       local statement = parseStatement(lexer)
       if statement == nil then
-	 return nil
+         return nil
       end
       append(ast, statement)
    end
@@ -165,14 +165,14 @@ function parseWriteStatement(lexer)
    while not done do
       writeArg = parseWriteArg(lexer)
       if writeArg == nil then
-	 return nil
+         return nil
       end
       append(ast, writeArg)
 
       if lexer:matchStr(')') then
-	 done = true
+         done = true
       elseif not lexer:matchStr(',') then
-	 return nil
+         return nil
       end
    end
    return ast
