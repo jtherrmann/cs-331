@@ -186,7 +186,7 @@ function parseWriteArg(lexer)
    elseif lexer:cat() == lexit.STRLIT then
       ast = {STRLIT_OUT, lexer:popStr()}
    end
-   return ast -- TODO: parse more kinds of write args
+   return ast -- TODO: write args can be exprs
 end
 
 
