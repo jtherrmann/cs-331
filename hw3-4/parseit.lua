@@ -280,7 +280,6 @@ function parseWhileStatement(lexer)
 end
 
 
--- TODO: factor out a parse func call function when get to parseFactor
 function parseIdStatement(lexer)
    assert(lexer:cat() == lexit.ID)
    local id = lexer:popStr()
@@ -323,6 +322,7 @@ function parseExpr(lexer)
 end
 
 
+-- TODO: break into smaller funcs
 function parseFactor(lexer)
    if lexer:cat() == lexit.NUMLIT then
       return {NUMLIT_VAL, lexer:popStr()}
@@ -331,7 +331,15 @@ function parseFactor(lexer)
       return {BOOLLIT_VAL, lexer:popStr()}
    end
    if lexer:cat() == lexit.ID then
-      return {SIMPLE_VAR, lexer:popStr()}
+      -- TODO: DRY up with parseIdStatement if possible
+      local id = lexer:popStr()
+      if lexer:matchStr('(') then
+         if not lexer:matchStr(')') then
+            return nil
+         end
+         return {FUNC_CALL, id}
+      end
+      return {SIMPLE_VAR, id}
    end
    return nil
 end
