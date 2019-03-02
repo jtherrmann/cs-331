@@ -140,14 +140,14 @@ end
 
 
 function parseStatement(lexer)
-   local ast
    if lexer:str() == 'write' then
-      ast = parseWriteStatement(lexer)
-   elseif lexer:matchCat(lexit.ID) then
-      -- TODO
-      ast = nil
+      return parseWriteStatement(lexer)
    end
-   return ast
+   if lexer:matchCat(lexit.ID) then
+      -- TODO
+      return nil
+   end
+   return nil
 end
 
 
@@ -180,13 +180,13 @@ end
 
 
 function parseWriteArg(lexer)
-   local ast
    if lexer:matchStr('cr') then
-      ast = {CR_OUT}
-   elseif lexer:cat() == lexit.STRLIT then
-      ast = {STRLIT_OUT, lexer:popStr()}
+      return {CR_OUT}
    end
-   return ast -- TODO: write args can be exprs
+   if lexer:cat() == lexit.STRLIT then
+      return {STRLIT_OUT, lexer:popStr()}
+   end
+   return nil -- TODO: write args can be exprs
 end
 
 
