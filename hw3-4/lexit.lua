@@ -194,15 +194,15 @@ function lexit.lex(program)
    -- the next lexeme, or to program:len()+1.
    local function skipWhitespace()
       while isWhitespace(currChar()) do
-	 drop1()
+         drop1()
       end
 
       if currChar() == "#" then
-	 drop1()
-	 while currChar() ~= "\n" and currChar() ~= "" do
-	    drop1()
-	 end
-	 skipWhitespace()
+         drop1()
+         while currChar() ~= "\n" and currChar() ~= "" do
+            drop1()
+         end
+         skipWhitespace()
       end
    end
 
@@ -213,8 +213,8 @@ function lexit.lex(program)
    -- munch rule, false otherwise.
    local function maximalMunchSpecialCase()
       return category == lexit.ID or category == lexit.NUMLIT
-	 or prevLexstr == "]" or prevLexstr == ")" or prevLexstr == "true"
-	 or prevLexstr == "false"
+         or prevLexstr == "]" or prevLexstr == ")" or prevLexstr == "true"
+         or prevLexstr == "false"
    end
 
    -- ***** State-Handler Functions *****
@@ -230,39 +230,39 @@ function lexit.lex(program)
    -- Handle the START state.
    local function handle_START()
       if isIllegal(ch) then
-	 add1()
-	 state = DONE
-	 category = lexit.MAL
+         add1()
+         state = DONE
+         category = lexit.MAL
       elseif isLetter(ch) or ch == "_" then
-	 add1()
-	 state = LETTER
+         add1()
+         state = LETTER
       elseif isDigit(ch) then
-	 add1()
-	 state = DIGIT
+         add1()
+         state = DIGIT
       elseif ch == "+" or ch == "-" then
-	 add1()
-	 state = PLUS_MINUS
+         add1()
+         state = PLUS_MINUS
       elseif ch == "'" or ch == '"' then
-	 strQuote = ch
-	 add1()
-	 state = STRING
+         strQuote = ch
+         add1()
+         state = STRING
       elseif ch == "&" then
-	 add1()
-	 state = AMPERSAND
+         add1()
+         state = AMPERSAND
       elseif ch == "|" then
-	 add1()
-	 state = PIPE
+         add1()
+         state = PIPE
       elseif ch == "=" or ch == "!" or ch == "<" or ch == ">" then
-	 add1()
-	 state = EQUALS
+         add1()
+         state = EQUALS
       elseif ch == "*" or ch == "/" or ch == "%" or ch == "[" or ch == "]" then
-	 add1()
-	 state = DONE
-	 category = lexit.OP
+         add1()
+         state = DONE
+         category = lexit.OP
       else
-	 add1()
-	 state = DONE
-	 category = lexit.PUNCT
+         add1()
+         state = DONE
+         category = lexit.PUNCT
       end
    end
 
@@ -270,17 +270,17 @@ function lexit.lex(program)
    -- Handle the LETTER state.
    local function handle_LETTER()
       if isLetter(ch) or isDigit(ch) or ch == "_" then
-	 add1()
+         add1()
       else
-	 state = DONE
-	 if lexstr == "cr" or lexstr == "def" or lexstr == "else"
-	 or lexstr == "elseif" or lexstr == "end" or lexstr == "false"
-	 or lexstr == "if" or lexstr == "readnum" or lexstr == "return"
-	 or lexstr == "true" or lexstr == "while" or lexstr == "write" then
-	    category = lexit.KEY
-	 else
-	    category = lexit.ID
-	 end
+         state = DONE
+         if lexstr == "cr" or lexstr == "def" or lexstr == "else"
+         or lexstr == "elseif" or lexstr == "end" or lexstr == "false"
+         or lexstr == "if" or lexstr == "readnum" or lexstr == "return"
+         or lexstr == "true" or lexstr == "while" or lexstr == "write" then
+            category = lexit.KEY
+         else
+            category = lexit.ID
+         end
       end
    end
 
@@ -288,20 +288,20 @@ function lexit.lex(program)
    -- Handle the DIGIT state.
    local function handle_DIGIT()
       if isDigit(ch) then
-	 add1()
+         add1()
       elseif (ch == "e" or ch == "E") and isDigit(nextChar()) then
-	 add1()  -- add e/E to lexeme
-	 add1()  -- add digit to lexeme (optional)
-	 state = EXPONENT
+         add1()  -- add e/E to lexeme
+         add1()  -- add digit to lexeme (optional)
+         state = EXPONENT
       elseif (ch == "e" or ch == "E") and nextChar() == "+"
       and isDigit(nextNextChar()) then
-	 add1()  -- add e/E to lexeme
-	 add1()  -- add + to lexeme
-	 add1()  -- add digit to lexeme (optional)
-	 state = EXPONENT
+         add1()  -- add e/E to lexeme
+         add1()  -- add + to lexeme
+         add1()  -- add digit to lexeme (optional)
+         state = EXPONENT
       else
-	 state = DONE
-	 category = lexit.NUMLIT
+         state = DONE
+         category = lexit.NUMLIT
       end
    end
 
@@ -309,11 +309,11 @@ function lexit.lex(program)
    -- Handle the PLUS_MINUS state.
    local function handle_PLUS_MINUS()
       if isDigit(ch) and not maximalMunchSpecialCase() then
-	 add1()
-	 state = DIGIT
+         add1()
+         state = DIGIT
       else
-	 state = DONE
-	 category = lexit.OP
+         state = DONE
+         category = lexit.OP
       end
    end
 
@@ -321,10 +321,10 @@ function lexit.lex(program)
    -- Handle the EXPONENT state.
    local function handle_EXPONENT()
       if isDigit(ch) then
-	 add1()
+         add1()
       else
-	 state = DONE
-	 category = lexit.NUMLIT
+         state = DONE
+         category = lexit.NUMLIT
       end
    end
 
@@ -332,18 +332,18 @@ function lexit.lex(program)
    -- Handle the STRING state.
    local function handle_STRING()
       if ch == strQuote then
-	 add1()
-	 state = DONE
-	 category = lexit.STRLIT
+         add1()
+         state = DONE
+         category = lexit.STRLIT
       elseif ch == "\n" then
-	 add1()
-	 state = DONE
-	 category = lexit.MAL
+         add1()
+         state = DONE
+         category = lexit.MAL
       elseif ch == "" then
-	 state = DONE
-	 category = lexit.MAL
+         state = DONE
+         category = lexit.MAL
       else
-	 add1()
+         add1()
       end
    end
 
@@ -351,12 +351,12 @@ function lexit.lex(program)
    -- Handle the AMPERSAND state.
    local function handle_AMPERSAND()
       if ch == "&" then
-	 add1()
-	 state = DONE
-	 category = lexit.OP
+         add1()
+         state = DONE
+         category = lexit.OP
       else
-	 state = DONE
-	 category = lexit.PUNCT
+         state = DONE
+         category = lexit.PUNCT
       end
    end
 
@@ -364,12 +364,12 @@ function lexit.lex(program)
    -- Handle the PIPE state.
    local function handle_PIPE()
       if ch == "|" then
-	 add1()
-	 state = DONE
-	 category = lexit.OP
+         add1()
+         state = DONE
+         category = lexit.OP
       else
-	 state = DONE
-	 category = lexit.PUNCT
+         state = DONE
+         category = lexit.PUNCT
       end
    end
 
@@ -377,7 +377,7 @@ function lexit.lex(program)
    -- Handle the EQUALS state.
    local function handle_EQUALS()
       if ch == "=" then
-	 add1()
+         add1()
       end
       state = DONE
       category = lexit.OP
@@ -406,13 +406,13 @@ function lexit.lex(program)
    -- nil, nil if no more lexemes.
    local function getLexeme(dummy1, dummy2)
       if pos > program:len() then
-	 return nil, nil
+         return nil, nil
       end
       lexstr = ""
       state = START
       while state ~= DONE do
-	 ch = currChar()
-	 handlers[state]()
+         ch = currChar()
+         handlers[state]()
       end
 
       skipWhitespace()
@@ -435,4 +435,3 @@ end
 
 
 return lexit
-
