@@ -367,8 +367,22 @@ end
 
 
 function parseTerm(lexer)
-   --TODO
-   return parseFactor(lexer)
+   local factor = parseFactor(lexer)
+   if factor == nil then
+      return nil
+   end
+
+   -- TODO: allow 0 or more
+   if lexer:str() == '*' or lexer:str() == '/' or lexer:str() == '%' then
+      local binop = lexer:popStr()
+      local factor2 = parseFactor(lexer)
+      if factor2 == nil then
+         return nil
+      end
+      return {{BIN_OP, binop}, factor, factor2}
+   end
+
+   return factor
 end
 
 
