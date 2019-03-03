@@ -378,14 +378,13 @@ function parseArithExpr(lexer)
       return nil
    end
 
-   -- TODO: allow 0 or more
-   if lexer:str() == '+' or lexer:str() == '-' then
+   while lexer:str() == '+' or lexer:str() == '-' do
       local binop = lexer:popStr()
       local term2 = parseTerm(lexer)
       if term2 == nil then
          return nil
       end
-      return {{BIN_OP, binop}, term, term2}
+      term = {{BIN_OP, binop}, term, term2}
    end
 
    return term
