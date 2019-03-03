@@ -448,7 +448,6 @@ function parseVar(lexer)
    assert(lexer:cat() == lexit.ID)
    local id = lexer:popStr()
 
-   -- TODO: DRY up with parseStatement (func def) if possible? or not?
    if lexer:matchStr('(') then
       if not lexer:matchStr(')') then
          return nil
