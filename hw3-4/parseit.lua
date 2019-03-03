@@ -2,6 +2,8 @@
 -- - TODO throughout file
 -- - linter (e.g. for checking undefined vars, missing "local"s)
 -- - coding standards, reread assignment reqs
+-- - comments, incl. sections (Lexer, parse funcs, etc.)
+-- - review code for general cleanness/quality
 
 local parseit = {}
 
