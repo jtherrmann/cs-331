@@ -443,6 +443,13 @@ function parseFactor(lexer)
       return {BOOLLIT_VAL, lexer:popStr()}
    end
 
+   if lexer:matchStr('readnum') then
+      if not (lexer:matchStr('(') and lexer:matchStr(')')) then
+         return nil
+      end
+      return {READNUM_CALL}
+   end
+
    if lexer:cat() == lexit.ID then
       -- TODO: DRY up with parseIdStatement if possible
       local id = lexer:popStr()
