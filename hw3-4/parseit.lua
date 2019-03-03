@@ -134,10 +134,12 @@ end
 
 function parseStmtList(lexer)
    local ast = {STMT_LIST}
+   local statement
+
    while lexer:str() == 'write' or lexer:str() == 'def' or lexer:str() == 'if'
    or lexer:str() == 'while' or lexer:str() == 'return'
    or lexer:cat() == lexit.ID do
-      local statement = parseStatement(lexer)
+      statement = parseStatement(lexer)
       if statement == nil then
          return nil
       end
@@ -314,9 +316,10 @@ function parseExpr(lexer)
       return nil
    end
 
+   local binop, compExpr2
    while lexer:str() == '&&' or lexer:str() == '||' do
-      local binop = lexer:popStr()
-      local compExpr2 = parseCompExpr(lexer)
+      binop = lexer:popStr()
+      compExpr2 = parseCompExpr(lexer)
       if compExpr2 == nil then
          return nil
       end
@@ -341,10 +344,11 @@ function parseCompExpr(lexer)
       return nil
    end
 
+   local binop, arithExpr2
    while lexer:str() == '==' or lexer:str() == '!=' or lexer:str() == '<'
    or lexer:str() == '<=' or lexer:str() == '>' or lexer:str() == '>=' do
-      local binop = lexer:popStr()
-      local arithExpr2 = parseArithExpr(lexer)
+      binop = lexer:popStr()
+      arithExpr2 = parseArithExpr(lexer)
       if arithExpr2 == nil then
          return nil
       end
@@ -361,9 +365,10 @@ function parseArithExpr(lexer)
       return nil
    end
 
+   local binop, term2
    while lexer:str() == '+' or lexer:str() == '-' do
-      local binop = lexer:popStr()
-      local term2 = parseTerm(lexer)
+      binop = lexer:popStr()
+      term2 = parseTerm(lexer)
       if term2 == nil then
          return nil
       end
@@ -380,9 +385,10 @@ function parseTerm(lexer)
       return nil
    end
 
+   local binop, factor2
    while lexer:str() == '*' or lexer:str() == '/' or lexer:str() == '%' do
-      local binop = lexer:popStr()
-      local factor2 = parseFactor(lexer)
+      binop = lexer:popStr()
+      factor2 = parseFactor(lexer)
       if factor2 == nil then
          return nil
       end
