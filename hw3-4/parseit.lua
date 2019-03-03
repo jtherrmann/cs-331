@@ -113,6 +113,7 @@ local parseArithExpr
 local parseTerm
 local parseFactor
 local parseParenExpr
+local parseUnaryOpFactor
 local parseVar
 
 local beginsStatement
@@ -402,12 +403,7 @@ function parseFactor(lexer)
    end
 
    if lexer:str() == '+' or lexer:str() == '-' then
-      local unaryOp = lexer:popStr()
-      local factor = parseFactor(lexer)
-      if factor == nil then
-         return nil
-      end
-      return {{UN_OP, unaryOp}, factor}
+      return parseUnaryOpFactor(lexer)
    end
 
    if lexer:cat() == lexit.NUMLIT then
@@ -440,6 +436,17 @@ function parseParenExpr(lexer)
       return nil
    end
    return expr
+end
+
+
+function parseUnaryOpFactor(lexer)
+   assert(lexer:str() == '+' or lexer:str() == '-')
+   local unaryOp = lexer:popStr()
+   local factor = parseFactor(lexer)
+   if factor == nil then
+      return nil
+   end
+   return {{UN_OP, unaryOp}, factor}
 end
 
 
