@@ -404,6 +404,14 @@ end
 
 -- TODO: break into smaller funcs
 function parseFactor(lexer)
+   if lexer:str() == '+' or lexer:str() == '-' then
+      local unaryOp = lexer:popStr()
+      local factor = parseFactor(lexer)
+      if factor == nil then
+         return nil
+      end
+      return {{UN_OP, unaryOp}, factor}
+   end
    if lexer:cat() == lexit.NUMLIT then
       return {NUMLIT_VAL, lexer:popStr()}
    end
