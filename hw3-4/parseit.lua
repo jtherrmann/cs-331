@@ -1,7 +1,5 @@
 -- TODO:
 -- - TODO throughout file
--- - factor out func for checking if val is in list of vals (can do arbitrary #
---   of args?)
 -- - can just do "return" w/o nil?
 -- - confirm we're allowed extra parsing funcs (not just 1 per nonterminal)
 -- - use elseif even when return in if bodies?
@@ -131,6 +129,16 @@ local function append(t, item)
 end
 
 
+local function inArray(item, t)
+   for _, val in ipairs(t) do
+      if val == item then
+         return true
+      end
+   end
+   return false
+end
+
+
 function parseit.parse(input)
    local lexer = Lexer.new(input)
    local ast = parseStmtList(lexer)
@@ -142,8 +150,7 @@ function parseStmtList(lexer)
    local ast = {STMT_LIST}
    local statement
 
-   while lexer:str() == 'write' or lexer:str() == 'def' or lexer:str() == 'if'
-   or lexer:str() == 'while' or lexer:str() == 'return'
+   while inArray(lexer:str(), {'write', 'def', 'if', 'while', 'return'})
    or lexer:cat() == lexit.ID do
       statement = parseStatement(lexer)
       if statement == nil then
@@ -351,8 +358,7 @@ function parseCompExpr(lexer)
    end
 
    local binop, arithExpr2
-   while lexer:str() == '==' or lexer:str() == '!=' or lexer:str() == '<'
-   or lexer:str() == '<=' or lexer:str() == '>' or lexer:str() == '>=' do
+   while inArray(lexer:str(), {'==', '!=', '<', '<=', '>', '>='}) do
       binop = lexer:popStr()
       arithExpr2 = parseArithExpr(lexer)
       if arithExpr2 == nil then
@@ -392,7 +398,7 @@ function parseTerm(lexer)
    end
 
    local binop, factor2
-   while lexer:str() == '*' or lexer:str() == '/' or lexer:str() == '%' do
+   while inArray(lexer:str(), {'*', '/', '%'}) do
       binop = lexer:popStr()
       factor2 = parseFactor(lexer)
       if factor2 == nil then
