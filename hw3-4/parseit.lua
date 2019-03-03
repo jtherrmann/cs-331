@@ -1,5 +1,11 @@
 -- TODO:
 -- - TODO throughout file
+-- - factor out func for checking if val is in list of vals (can do arbitrary #
+--   of args?)
+-- - can just do "return" w/o nil?
+-- - confirm we're allowed extra parsing funcs (not just 1 per nonterminal)
+-- - use elseif even when return in if bodies?
+-- - DRY up left-associativity funcs
 -- - linter (e.g. for checking undefined vars, missing "local"s)
 -- - coding standards, reread assignment reqs
 -- - comments, incl. sections (Lexer, parse funcs, etc.)
