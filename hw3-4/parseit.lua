@@ -112,6 +112,7 @@ local parseCompExpr
 local parseArithExpr
 local parseTerm
 local parseFactor
+local parseParenExpr
 local parseVar
 
 local beginsStatement
@@ -396,12 +397,8 @@ end
 
 -- TODO: break into smaller funcs
 function parseFactor(lexer)
-   if lexer:matchStr('(') then
-      local expr = parseExpr(lexer)
-      if expr == nil or not lexer:matchStr(')') then
-         return nil
-      end
-      return expr
+   if lexer:str() == '(' then
+      return parseParenExpr(lexer)
    end
 
    if lexer:str() == '+' or lexer:str() == '-' then
@@ -433,6 +430,16 @@ function parseFactor(lexer)
    end
 
    return nil
+end
+
+
+function parseParenExpr(lexer)
+   assert(lexer:matchStr('('))
+   local expr = parseExpr(lexer)
+   if expr == nil or not lexer:matchStr(')') then
+      return nil
+   end
+   return expr
 end
 
 
