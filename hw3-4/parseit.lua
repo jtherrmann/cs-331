@@ -107,6 +107,7 @@ local parseWriteArg
 local parseFuncDefStatement
 local parseIfStatement
 local parseWhileStatement
+local parseReturnStatement
 local parseIdStatement
 local parseExpr
 local parseCompExpr
@@ -160,6 +161,9 @@ function parseStatement(lexer)
    end
    if lexer:str() == 'while' then
       return parseWhileStatement(lexer)
+   end
+   if lexer:str() == 'return' then
+      return parseReturnStatement(lexer)
    end
    if lexer:cat() == lexit.ID then
       return parseIdStatement(lexer)
@@ -280,6 +284,16 @@ function parseWhileStatement(lexer)
       return nil
    end
    return {WHILE_STMT, expr, stmtList}
+end
+
+
+function parseReturnStatement(lexer)
+   assert(lexer:matchStr('return'))
+   local expr = parseExpr(lexer)
+   if expr == nil then
+      return nil
+   end
+   return {RETURN_STMT, expr}
 end
 
 
