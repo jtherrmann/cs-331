@@ -129,9 +129,9 @@ local function append(t, item)
 end
 
 
-local function inArray(item, t)
-   for _, val in ipairs(t) do
-      if val == item then
+local function inArray(val, t)
+   for _, item in ipairs(t) do
+      if item == val then
          return true
       end
    end
