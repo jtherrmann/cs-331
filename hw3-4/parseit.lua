@@ -337,14 +337,13 @@ function parseExpr(lexer)
       return nil
    end
 
-   -- TODO: allow 0 or more
-   if lexer:str() == '&&' or lexer:str() == '||' then
+   while lexer:str() == '&&' or lexer:str() == '||' do
       local binop = lexer:popStr()
       local compExpr2 = parseCompExpr(lexer)
       if compExpr2 == nil then
          return nil
       end
-      return {{BIN_OP, binop}, compExpr, compExpr2}
+      compExpr = {{BIN_OP, binop}, compExpr, compExpr2}
    end
 
    return compExpr
