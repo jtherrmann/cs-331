@@ -357,15 +357,14 @@ function parseCompExpr(lexer)
       return nil
    end
 
-   -- TODO: allow 0 or more
-   if lexer:str() == '==' or lexer:str() == '!=' or lexer:str() == '<'
-   or lexer:str() == '<=' or lexer:str() == '>' or lexer:str() == '>=' then
+   while lexer:str() == '==' or lexer:str() == '!=' or lexer:str() == '<'
+   or lexer:str() == '<=' or lexer:str() == '>' or lexer:str() == '>=' do
       local binop = lexer:popStr()
       local arithExpr2 = parseArithExpr(lexer)
       if arithExpr2 == nil then
          return nil
       end
-      return {{BIN_OP, binop}, arithExpr, arithExpr2}
+      arithExpr = {{BIN_OP, binop}, arithExpr, arithExpr2}
    end
 
    return arithExpr
