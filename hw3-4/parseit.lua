@@ -411,6 +411,7 @@ function parseFactor(lexer)
       end
       return expr
    end
+
    if lexer:str() == '+' or lexer:str() == '-' then
       local unaryOp = lexer:popStr()
       local factor = parseFactor(lexer)
@@ -419,23 +420,37 @@ function parseFactor(lexer)
       end
       return {{UN_OP, unaryOp}, factor}
    end
+
    if lexer:cat() == lexit.NUMLIT then
       return {NUMLIT_VAL, lexer:popStr()}
    end
+
    if lexer:str() == 'true' or lexer:str() == 'false' then
       return {BOOLLIT_VAL, lexer:popStr()}
    end
+
    if lexer:cat() == lexit.ID then
       -- TODO: DRY up with parseIdStatement if possible
       local id = lexer:popStr()
+
       if lexer:matchStr('(') then
          if not lexer:matchStr(')') then
             return nil
          end
          return {FUNC_CALL, id}
       end
+
+      if lexer:matchStr('[') then
+         local expr = parseExpr(lexer)
+         if expr == nil or not lexer:matchStr(']') then
+            return nil
+         end
+         return {ARRAY_VAR, id, expr}
+      end
+
       return {SIMPLE_VAR, id}
    end
+
    return nil
 end
    
