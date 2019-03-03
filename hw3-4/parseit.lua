@@ -110,6 +110,8 @@ local parseWhileStatement
 local parseIdStatement
 local parseExpr
 local parseCompExpr
+local parseArithExpr
+local parseTerm
 local parseFactor
 
 local beginsStatement
@@ -340,6 +342,18 @@ end
 
 function parseCompExpr(lexer)
    -- TODO
+   return parseArithExpr(lexer)
+end
+
+
+function parseArithExpr(lexer)
+   -- TODO
+   return parseTerm(lexer)
+end
+
+
+function parseTerm(lexer)
+   --TODO
    return parseFactor(lexer)
 end
 
