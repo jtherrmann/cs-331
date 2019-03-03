@@ -350,8 +350,15 @@ function parseExpr(lexer)
 end
 
 
--- TODO: '!' comp_expr
 function parseCompExpr(lexer)
+   if lexer:matchStr('!') then
+      local compExpr = parseCompExpr(lexer)
+      if compExpr == nil then
+         return nil
+      end
+      return {{UN_OP, '!'}, compExpr}
+   end
+
    local arithExpr = parseArithExpr(lexer)
    if arithExpr == nil then
       return nil
