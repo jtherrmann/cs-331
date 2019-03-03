@@ -404,6 +404,13 @@ end
 
 -- TODO: break into smaller funcs
 function parseFactor(lexer)
+   if lexer:matchStr('(') then
+      local expr = parseExpr(lexer)
+      if expr == nil or not lexer:matchStr(')') then
+         return nil
+      end
+      return expr
+   end
    if lexer:str() == '+' or lexer:str() == '-' then
       local unaryOp = lexer:popStr()
       local factor = parseFactor(lexer)
