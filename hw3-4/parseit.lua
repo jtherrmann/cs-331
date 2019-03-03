@@ -220,11 +220,7 @@ function parseFuncDefStatement(lexer)
    end
 
    local stmtList = parseStmtList(lexer)
-   if stmtList == nil then
-      return nil
-   end
-
-   if not lexer:matchStr('end') then
+   if stmtList == nil or not lexer:matchStr('end') then
       return nil
    end
    return {FUNC_DEF, id, stmtList}
@@ -275,11 +271,7 @@ function parseWhileStatement(lexer)
    end
 
    local stmtList = parseStmtList(lexer)
-   if stmtList == nil then
-      return nil
-   end
-
-   if not lexer:matchStr('end') then
+   if stmtList == nil or not lexer:matchStr('end') then
       return nil
    end
    return {WHILE_STMT, expr, stmtList}
