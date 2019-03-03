@@ -114,6 +114,7 @@ local parseTerm
 local parseFactor
 local parseParenExpr
 local parseUnaryOpFactor
+local parseReadnumFactor
 local parseVar
 
 local beginsStatement
@@ -401,30 +402,21 @@ function parseFactor(lexer)
    if lexer:str() == '(' then
       return parseParenExpr(lexer)
    end
-
    if lexer:str() == '+' or lexer:str() == '-' then
       return parseUnaryOpFactor(lexer)
    end
-
    if lexer:cat() == lexit.NUMLIT then
       return {NUMLIT_VAL, lexer:popStr()}
    end
-
    if lexer:str() == 'true' or lexer:str() == 'false' then
       return {BOOLLIT_VAL, lexer:popStr()}
    end
-
-   if lexer:matchStr('readnum') then
-      if not (lexer:matchStr('(') and lexer:matchStr(')')) then
-         return nil
-      end
-      return {READNUM_CALL}
+   if lexer:str() == 'readnum' then
+      return parseReadnumFactor(lexer)
    end
-
    if lexer:cat() == lexit.ID then
       return parseVar(lexer)
    end
-
    return nil
 end
 
@@ -447,6 +439,15 @@ function parseUnaryOpFactor(lexer)
       return nil
    end
    return {{UN_OP, unaryOp}, factor}
+end
+
+
+function parseReadnumFactor(lexer)
+   assert(lexer:matchStr('readnum'))
+   if not (lexer:matchStr('(') and lexer:matchStr(')')) then
+      return nil
+   end
+   return {READNUM_CALL}
 end
 
 
