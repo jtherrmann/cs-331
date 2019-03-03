@@ -300,24 +300,10 @@ end
 
 function parseIdStatement(lexer)
    assert(lexer:cat() == lexit.ID)
-   local id = lexer:popStr()
 
-   if lexer:matchStr('(') then
-      if not lexer:matchStr(')') then
-         return nil
-      end
-      return {FUNC_CALL, id}
-   end
-
-   local var
-   if lexer:matchStr('[') then
-      local indexExpr = parseExpr(lexer)
-      if indexExpr == nil or not lexer:matchStr(']') then
-         return nil
-      end
-      var = {ARRAY_VAR, id, indexExpr}
-   else
-      var = {SIMPLE_VAR, id}
+   local var = parseVar(lexer)
+   if var == nil or var[1] == FUNC_CALL then
+      return var
    end
 
    if not lexer:matchStr('=') then
@@ -328,6 +314,7 @@ function parseIdStatement(lexer)
    if expr == nil then
       return nil
    end
+
    return {ASSN_STMT, var, expr}
 end
 
