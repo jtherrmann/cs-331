@@ -347,8 +347,22 @@ end
 
 
 function parseArithExpr(lexer)
-   -- TODO
-   return parseTerm(lexer)
+   local term = parseTerm(lexer)
+   if term == nil then
+      return nil
+   end
+
+   -- TODO: allow 0 or more
+   if lexer:str() == '+' or lexer:str() == '-' then
+      local binop = lexer:popStr()
+      local term2 = parseTerm(lexer)
+      if term2 == nil then
+         return nil
+      end
+      return {{BIN_OP, binop}, term, term2}
+   end
+
+   return term
 end
 
 
