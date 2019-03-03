@@ -117,6 +117,7 @@ local parseExpr
 local parseCompExpr
 local parseArithExpr
 local parseTerm
+local parseLeftAssoc
 local parseFactor
 local parseParenExpr
 local parseUnaryOpFactor
@@ -392,22 +393,27 @@ end
 
 
 function parseTerm(lexer)
-   local factor = parseFactor(lexer)
-   if factor == nil then
+   return parseLeftAssoc(lexer, parseFactor, {'*', '/', '%'})
+end
+
+
+function parseLeftAssoc(lexer, operandParser, binops)
+   local ast = operandParser(lexer)
+   if ast == nil then
       return nil
    end
 
-   local binop, factor2
-   while inArray(lexer:str(), {'*', '/', '%'}) do
+   local binop, operand
+   while inArray(lexer:str(), binops) do
       binop = lexer:popStr()
-      factor2 = parseFactor(lexer)
-      if factor2 == nil then
+      operand = operandParser(lexer)
+      if operand == nil then
          return nil
       end
-      factor = {{BIN_OP, binop}, factor, factor2}
+      ast = {{BIN_OP, binop}, ast, operand}
    end
 
-   return factor
+   return ast
 end
 
 
