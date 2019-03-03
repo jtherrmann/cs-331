@@ -119,8 +119,6 @@ local parseUnaryOpFactor
 local parseReadnumFactor
 local parseVar
 
-local beginsStatement
-
 
 local function append(t, item)
    t[#t+1] = item
@@ -136,7 +134,9 @@ end
 
 function parseStmtList(lexer)
    local ast = {STMT_LIST}
-   while beginsStatement(lexer:str(), lexer:cat()) do
+   while lexer:str() == 'write' or lexer:str() == 'def' or lexer:str() == 'if'
+   or lexer:str() == 'while' or lexer:str() == 'return'
+   or lexer:cat() == lexit.ID do
       local statement = parseStatement(lexer)
       if statement == nil then
          return nil
@@ -144,12 +144,6 @@ function parseStmtList(lexer)
       append(ast, statement)
    end
    return ast
-end
-
-
-function beginsStatement(lexStr, lexCat)
-   return lexStr == 'write' or lexStr == 'def' or lexStr == 'if'
-   or lexStr == 'while' or lexStr == 'return' or lexCat == lexit.ID
 end
 
 
