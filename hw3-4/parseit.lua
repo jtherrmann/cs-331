@@ -114,6 +114,7 @@ local parseCompExpr
 local parseArithExpr
 local parseTerm
 local parseFactor
+local parseVar
 
 local beginsStatement
 
@@ -451,29 +452,35 @@ function parseFactor(lexer)
    end
 
    if lexer:cat() == lexit.ID then
-      -- TODO: DRY up with parseIdStatement if possible
-      local id = lexer:popStr()
-
-      if lexer:matchStr('(') then
-         if not lexer:matchStr(')') then
-            return nil
-         end
-         return {FUNC_CALL, id}
-      end
-
-      if lexer:matchStr('[') then
-         local expr = parseExpr(lexer)
-         if expr == nil or not lexer:matchStr(']') then
-            return nil
-         end
-         return {ARRAY_VAR, id, expr}
-      end
-
-      return {SIMPLE_VAR, id}
+      return parseVar(lexer)
    end
 
    return nil
 end
-   
+
+
+function parseVar(lexer)
+   assert(lexer:cat() == lexit.ID)
+   local id = lexer:popStr()
+
+   -- TODO: DRY up with parseStatement (func def) if possible? or not?
+   if lexer:matchStr('(') then
+      if not lexer:matchStr(')') then
+         return nil
+      end
+      return {FUNC_CALL, id}
+   end
+
+   if lexer:matchStr('[') then
+      local expr = parseExpr(lexer)
+      if expr == nil or not lexer:matchStr(']') then
+         return nil
+      end
+      return {ARRAY_VAR, id, expr}
+   end
+
+   return {SIMPLE_VAR, id}
+end
+
 
 return parseit
