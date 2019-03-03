@@ -297,10 +297,7 @@ function parseIdStatement(lexer)
    local var
    if lexer:matchStr('[') then
       local indexExpr = parseExpr(lexer)
-      if indexExpr == nil then
-         return nil
-      end
-      if not lexer:matchStr(']') then
+      if indexExpr == nil or not lexer:matchStr(']') then
          return nil
       end
       var = {ARRAY_VAR, id, indexExpr}
