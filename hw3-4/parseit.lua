@@ -325,22 +325,7 @@ end
 
 
 function parseExpr(lexer)
-   local compExpr = parseCompExpr(lexer)
-   if compExpr == nil then
-      return nil
-   end
-
-   local binop, compExpr2
-   while lexer:str() == '&&' or lexer:str() == '||' do
-      binop = lexer:popStr()
-      compExpr2 = parseCompExpr(lexer)
-      if compExpr2 == nil then
-         return nil
-      end
-      compExpr = {{BIN_OP, binop}, compExpr, compExpr2}
-   end
-
-   return compExpr
+   return parseLeftAssoc(lexer, parseCompExpr, {'&&', '||'})
 end
 
 
@@ -352,43 +337,14 @@ function parseCompExpr(lexer)
       end
       return {{UN_OP, '!'}, compExpr}
    end
-
-   local arithExpr = parseArithExpr(lexer)
-   if arithExpr == nil then
-      return nil
-   end
-
-   local binop, arithExpr2
-   while inArray(lexer:str(), {'==', '!=', '<', '<=', '>', '>='}) do
-      binop = lexer:popStr()
-      arithExpr2 = parseArithExpr(lexer)
-      if arithExpr2 == nil then
-         return nil
-      end
-      arithExpr = {{BIN_OP, binop}, arithExpr, arithExpr2}
-   end
-
-   return arithExpr
+   return parseLeftAssoc(
+      lexer, parseArithExpr, {'==', '!=', '<', '<=', '>', '>='}
+   )
 end
 
 
 function parseArithExpr(lexer)
-   local term = parseTerm(lexer)
-   if term == nil then
-      return nil
-   end
-
-   local binop, term2
-   while lexer:str() == '+' or lexer:str() == '-' do
-      binop = lexer:popStr()
-      term2 = parseTerm(lexer)
-      if term2 == nil then
-         return nil
-      end
-      term = {{BIN_OP, binop}, term, term2}
-   end
-
-   return term
+   return parseLeftAssoc(lexer, parseTerm, {'+', '-'})
 end
 
 
