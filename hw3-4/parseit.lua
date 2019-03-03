@@ -397,7 +397,6 @@ function parseTerm(lexer)
 end
 
 
--- TODO: break into smaller funcs
 function parseFactor(lexer)
    if lexer:str() == '(' then
       return parseParenExpr(lexer)
