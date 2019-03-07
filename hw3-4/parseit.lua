@@ -121,7 +121,7 @@ local parseFactor
 local parseParenExpr
 local parseUnaryOpFactor
 local parseReadnumFactor
-local parseVar
+local parseCallOrVar
 
 
 local function append(t, item)
@@ -305,9 +305,9 @@ end
 function parseIdStatement(lexer)
    assert(lexer:cat() == lexit.ID)
 
-   local var = parseVar(lexer)
-   if var == nil or var[1] == FUNC_CALL then
-      return var
+   local callOrVar = parseCallOrVar(lexer)
+   if callOrVar == nil or callOrVar[1] == FUNC_CALL then
+      return callOrVar
    end
 
    if not lexer:matchStr('=') then
@@ -319,7 +319,7 @@ function parseIdStatement(lexer)
       return nil
    end
 
-   return {ASSN_STMT, var, expr}
+   return {ASSN_STMT, callOrVar, expr}
 end
 
 
@@ -389,7 +389,7 @@ function parseFactor(lexer)
       return parseReadnumFactor(lexer)
    end
    if lexer:cat() == lexit.ID then
-      return parseVar(lexer)
+      return parseCallOrVar(lexer)
    end
    return nil
 end
@@ -425,7 +425,7 @@ function parseReadnumFactor(lexer)
 end
 
 
-function parseVar(lexer)
+function parseCallOrVar(lexer)
    assert(lexer:cat() == lexit.ID)
    local id = lexer:popStr()
 
