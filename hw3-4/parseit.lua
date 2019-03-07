@@ -352,8 +352,8 @@ function parseTerm(lexer)
 end
 
 
-function parseLeftAssoc(lexer, operandParser, binops)
-   local ast = operandParser(lexer)
+function parseLeftAssoc(lexer, exprParser, binops)
+   local ast = exprParser(lexer)
    if ast == nil then
       return nil
    end
@@ -361,7 +361,7 @@ function parseLeftAssoc(lexer, operandParser, binops)
    local binop, operand
    while inArray(lexer:str(), binops) do
       binop = lexer:popStr()
-      operand = operandParser(lexer)
+      operand = exprParser(lexer)
       if operand == nil then
          return nil
       end
