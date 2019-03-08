@@ -7,24 +7,34 @@
 -- - coding standards, reread assignment reqs
 -- - comments, incl. sections (Lexer, parse funcs, etc.)
 -- - review code for general cleanness/quality
+-- - reread comments one more time
 
 local parseit = {}
 
 local lexit = require "lexit"
 
+-- TODO: confirm Lexer functions don't need to be local
+-- TODO: can define methods w/ colon syntax: https://www.lua.org/pil/16.html
 
--- TODO: invariants
+
+-- ============================================================================
+-- class Lexer
+-- ============================================================================
+
+-- Invariants:
+-- - self._str and self._cat are the string and category for the current
+--   lexeme, or both nil if there are no more lexemes.
+
+
+-- Metatable for Lexer objects.
 local Lexer = {}
 
 
--- TODO: confirm Lexer functions don't need to be local
+-- ----------------------------------------------------------------------------
+-- Constructor
+-- ----------------------------------------------------------------------------
 
-
-function Lexer.__index(tbl, key)
-   return Lexer[key]
-end
-
-
+-- Construct and return a new Lexer object for the given input string.
 function Lexer.new(input)
    local obj = {}
    setmetatable(obj, Lexer)
@@ -34,16 +44,33 @@ function Lexer.new(input)
 end
 
 
+-- ----------------------------------------------------------------------------
+-- Metamethods
+-- ----------------------------------------------------------------------------
+
+-- Allow accessing the Lexer metatable's methods via Lexer objects.
+function Lexer.__index(tbl, key)
+   return Lexer[key]
+end
+
+
+-- ----------------------------------------------------------------------------
+-- Public methods
+-- ----------------------------------------------------------------------------
+
+-- Return the current lexeme's string.
 function Lexer.str(self)
    return self._str
 end
 
 
+-- Return the current lexeme's category.
 function Lexer.cat(self)
    return self._cat
 end
 
 
+-- Return the current lexeme's string and advance to the next lexeme.
 function Lexer.popStr(self)
    local str = self:str()
    self:_next()
@@ -51,6 +78,8 @@ function Lexer.popStr(self)
 end
 
 
+-- If the current lexeme's string matches the given string, advance to the next
+-- lexeme and return true. Otherwise return false.
 function Lexer.matchStr(self, str)
    if str == self:str() then
       self:_next()
@@ -60,6 +89,8 @@ function Lexer.matchStr(self, str)
 end
 
 
+-- If the current lexeme's category matches the given category, advance to the
+-- next lexeme and return true. Otherwise return false.
 function Lexer.matchCat(self, cat)
    if cat == self:cat() then
       self:_next()
@@ -69,6 +100,7 @@ function Lexer.matchCat(self, cat)
 end
 
 
+-- Return true if there are no more lexemes, false otherwise.
 function Lexer.isDone(self)
    if self:str() == nil then
       assert(self:cat() == nil)
@@ -78,6 +110,11 @@ function Lexer.isDone(self)
 end
 
 
+-- ----------------------------------------------------------------------------
+-- Private methods
+-- ----------------------------------------------------------------------------
+
+-- Advance to the next lexeme.
 function Lexer._next(self)
    self._str, self._cat = self:_iter()
 end
