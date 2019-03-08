@@ -9,6 +9,7 @@
 -- - review code for general cleanness/quality
 -- - reread comments one more time
 
+-- Parser module.
 local parseit = {}
 
 local lexit = require "lexit"
@@ -24,7 +25,6 @@ local lexit = require "lexit"
 -- Invariants:
 -- - self._str and self._cat are the string and category for the current
 --   lexeme, or both nil if there are no more lexemes.
-
 
 -- Metatable for Lexer objects.
 local Lexer = {}
@@ -120,7 +120,14 @@ function Lexer._next(self)
 end
 
 
+-- ============================================================================
+-- Parser
+-- ============================================================================
+
+-- ----------------------------------------------------------------------------
 -- AST constants
+-- ----------------------------------------------------------------------------
+
 local STMT_LIST    = 1
 local WRITE_STMT   = 2
 local FUNC_DEF     = 3
@@ -138,6 +145,11 @@ local BOOLLIT_VAL  = 14
 local READNUM_CALL = 15
 local SIMPLE_VAR   = 16
 local ARRAY_VAR    = 17
+
+
+-- ----------------------------------------------------------------------------
+-- Local declarations for parse functions
+-- ----------------------------------------------------------------------------
 
 -- TODO: check that these are all here
 local parseStmtList
@@ -161,6 +173,10 @@ local parseReadnumFactor
 local parseCallOrVar
 
 
+-- ----------------------------------------------------------------------------
+-- Helper functions
+-- ----------------------------------------------------------------------------
+
 local function append(t, item)
    t[#t+1] = item
 end
@@ -175,6 +191,10 @@ local function inArray(val, t)
    return false
 end
 
+
+-- ----------------------------------------------------------------------------
+-- Parse functions
+-- ----------------------------------------------------------------------------
 
 function parseit.parse(input)
    local lexer = Lexer.new(input)
@@ -485,4 +505,5 @@ function parseCallOrVar(lexer)
 end
 
 
+-- Export parser module.
 return parseit
