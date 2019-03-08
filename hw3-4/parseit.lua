@@ -177,11 +177,14 @@ local parseCallOrVar
 -- Helper functions
 -- ----------------------------------------------------------------------------
 
+-- Append the given item to the given array-like table.
 local function append(t, item)
    t[#t+1] = item
 end
 
 
+-- Return true if the given value occurs in the given array-like table, false
+-- otherwise.
 local function inArray(val, t)
    for _, item in ipairs(t) do
       if item == val then
@@ -196,6 +199,10 @@ end
 -- Parse functions
 -- ----------------------------------------------------------------------------
 
+-- Parse the given input string and return three values: a boolean indicating
+-- whether the input is syntactically correct, a boolean indicating whether the
+-- end of the input was reached, and an AST representing the structure of the
+-- parsed input (or nil if the input is syntactically incorrect).
 function parseit.parse(input)
    local lexer = Lexer.new(input)
    local ast = parseStmtList(lexer)
@@ -203,6 +210,11 @@ function parseit.parse(input)
 end
 
 
+-- Each of the following parse functions takes a Lexer object as its first
+-- argument and returns an AST, or nil if there is a syntax error.
+
+
+-- Parse a statement list.
 function parseStmtList(lexer)
    local ast = {STMT_LIST}
    local statement
@@ -219,6 +231,7 @@ function parseStmtList(lexer)
 end
 
 
+-- Parse a statement.
 function parseStatement(lexer)
    if lexer:str() == 'write' then
       return parseWriteStatement(lexer)
@@ -238,10 +251,12 @@ function parseStatement(lexer)
    if lexer:cat() == lexit.ID then
       return parseIdStatement(lexer)
    end
+   -- TODO: actually assert false here? other places like this?
    return nil
 end
 
 
+-- Parse a write statement.
 function parseWriteStatement(lexer)
    assert(lexer:matchStr('write'))
 
@@ -267,6 +282,7 @@ function parseWriteStatement(lexer)
 end
 
 
+-- Parse a write argument.
 function parseWriteArg(lexer)
    if lexer:matchStr('cr') then
       return {CR_OUT}
@@ -278,6 +294,7 @@ function parseWriteArg(lexer)
 end
 
 
+-- Parse a function definition.
 function parseFuncDefStatement(lexer)
    assert(lexer:matchStr('def'))
 
@@ -298,6 +315,7 @@ function parseFuncDefStatement(lexer)
 end
 
 
+-- Parse an if statement.
 function parseIfStatement(lexer)
    assert(lexer:matchStr('if'))
 
@@ -333,6 +351,7 @@ function parseIfStatement(lexer)
 end
 
 
+-- Parse a while statement.
 function parseWhileStatement(lexer)
    assert(lexer:matchStr('while'))
 
@@ -349,6 +368,7 @@ function parseWhileStatement(lexer)
 end
 
 
+-- Parse a return statement.
 function parseReturnStatement(lexer)
    assert(lexer:matchStr('return'))
    local expr = parseExpr(lexer)
@@ -359,6 +379,8 @@ function parseReturnStatement(lexer)
 end
 
 
+-- Parse a statement beginning with an identifier, which may be a function call
+-- or an assignment statement.
 function parseIdStatement(lexer)
    assert(lexer:cat() == lexit.ID)
 
@@ -380,11 +402,13 @@ function parseIdStatement(lexer)
 end
 
 
+-- Parse an expression.
 function parseExpr(lexer)
    return parseLeftAssoc(lexer, parseCompExpr, {'&&', '||'})
 end
 
 
+-- Parse a comparison expression.
 function parseCompExpr(lexer)
    if lexer:matchStr('!') then
       local compExpr = parseCompExpr(lexer)
@@ -399,16 +423,25 @@ function parseCompExpr(lexer)
 end
 
 
+-- Parse an arithmetic expression.
 function parseArithExpr(lexer)
    return parseLeftAssoc(lexer, parseTerm, {'+', '-'})
 end
 
 
+-- Parse a term.
 function parseTerm(lexer)
    return parseLeftAssoc(lexer, parseFactor, {'*', '/', '%'})
 end
 
 
+-- Given a function that parses some expression <expr>, and an array of strings
+-- representing binary operators, parse an <expr> followed by zero or more
+-- occurrences of a binary operator followed by an <expr>. Binary operators are
+-- treated as left-associative.
+--
+-- exprParser must be a parse function that takes a Lexer object as its only
+-- argument and binops must be an array-like table of strings.
 function parseLeftAssoc(lexer, exprParser, binops)
    local ast = exprParser(lexer)
    if ast == nil then
@@ -429,6 +462,7 @@ function parseLeftAssoc(lexer, exprParser, binops)
 end
 
 
+-- Parse a factor.
 function parseFactor(lexer)
    if lexer:str() == '(' then
       return parseParenExpr(lexer)
@@ -452,6 +486,7 @@ function parseFactor(lexer)
 end
 
 
+-- Parse a parenthesized expression.
 function parseParenExpr(lexer)
    assert(lexer:matchStr('('))
    local expr = parseExpr(lexer)
@@ -462,6 +497,7 @@ function parseParenExpr(lexer)
 end
 
 
+-- Parse a factor prefixed with a unary operator.
 function parseUnaryOpFactor(lexer)
    assert(lexer:str() == '+' or lexer:str() == '-')
    local unaryOp = lexer:popStr()
@@ -473,6 +509,7 @@ function parseUnaryOpFactor(lexer)
 end
 
 
+-- Parse a readnum call.
 function parseReadnumFactor(lexer)
    assert(lexer:matchStr('readnum'))
    if not (lexer:matchStr('(') and lexer:matchStr(')')) then
@@ -482,6 +519,7 @@ function parseReadnumFactor(lexer)
 end
 
 
+-- Parse a function call or variable.
 function parseCallOrVar(lexer)
    assert(lexer:cat() == lexit.ID)
    local id = lexer:popStr()
