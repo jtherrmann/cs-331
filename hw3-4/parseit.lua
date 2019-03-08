@@ -1,11 +1,7 @@
 -- TODO:
 -- - TODO throughout file
--- - can just do "return" w/o nil?
--- - confirm we're allowed extra parsing funcs (not just 1 per nonterminal)
--- - use elseif even when return in if bodies?
 -- - linter (e.g. for checking undefined vars, missing "local"s)
 -- - coding standards, reread assignment reqs
--- - comments, incl. sections (Lexer, parse funcs, etc.)
 -- - review code for general cleanness/quality
 -- - reread comments one more time
 
