@@ -251,8 +251,7 @@ function parseStatement(lexer)
    if lexer:cat() == lexit.ID then
       return parseIdStatement(lexer)
    end
-   -- TODO: actually assert false here? other places like this?
-   return nil
+   assert(false)
 end
 
 
