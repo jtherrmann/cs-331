@@ -45,7 +45,7 @@ end
 -- ----------------------------------------------------------------------------
 
 -- Allow accessing the Lexer metatable's methods via Lexer objects.
-function Lexer.__index(tbl, key)
+function Lexer.__index(_, key)
    return Lexer[key]
 end
 
