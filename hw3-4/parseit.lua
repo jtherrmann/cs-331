@@ -1,8 +1,16 @@
 -- TODO:
 -- - TODO throughout file
--- - coding standards, reread assignment reqs
+-- - reread assignment reqs
 -- - review code for general cleanness/quality
 -- - reread comments one more time
+
+-- parseit.lua
+-- Jake Herrmann
+-- 8 March 2019
+-- CS 331 Spring 2019
+--
+-- parseit module for Assignment 4.
+
 
 -- Parser module.
 local parseit = {}
