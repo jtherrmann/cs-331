@@ -1,9 +1,3 @@
--- TODO:
--- - TODO throughout file
--- - reread assignment reqs
--- - review code for general cleanness/quality
--- - reread comments one more time
-
 -- parseit.lua
 -- Jake Herrmann
 -- 8 March 2019
@@ -12,8 +6,8 @@
 -- parseit module for Assignment 4.
 
 
--- Parser module.
 local parseit = {}
+
 
 local lexit = require "lexit"
 
@@ -26,7 +20,6 @@ local lexit = require "lexit"
 -- - self._str and self._cat are the string and category for the current
 --   lexeme, or both nil if there are no more lexemes.
 
--- Metatable for Lexer objects.
 local Lexer = {}
 
 
@@ -100,7 +93,7 @@ function Lexer.matchCat(self, cat)
 end
 
 
--- Return true if there are no more lexemes, false otherwise.
+-- Return true if there are no more lexemes, otherwise return false.
 function Lexer.isDone(self)
    if self:str() == nil then
       assert(self:cat() == nil)
@@ -182,8 +175,8 @@ local function append(t, item)
 end
 
 
--- Return true if the given value occurs in the given array-like table, false
--- otherwise.
+-- Return true if the given value occurs in the given array-like table,
+-- otherwise return false.
 local function inArray(val, t)
    for _, item in ipairs(t) do
       if item == val then
@@ -541,5 +534,4 @@ function parseCallOrVar(lexer)
 end
 
 
--- Export parser module.
 return parseit
