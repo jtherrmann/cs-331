@@ -1,6 +1,5 @@
 -- TODO:
 -- - TODO throughout file
--- - linter (e.g. for checking undefined vars, missing "local"s)
 -- - coding standards, reread assignment reqs
 -- - review code for general cleanness/quality
 -- - reread comments one more time
@@ -9,9 +8,6 @@
 local parseit = {}
 
 local lexit = require "lexit"
-
--- TODO: confirm Lexer functions don't need to be local
--- TODO: can define methods w/ colon syntax: https://www.lua.org/pil/16.html
 
 
 -- ============================================================================
@@ -147,7 +143,6 @@ local ARRAY_VAR    = 17
 -- Local declarations for parse functions
 -- ----------------------------------------------------------------------------
 
--- TODO: check that these are all here
 local parseStmtList
 local parseStatement
 local parseWriteStatement
