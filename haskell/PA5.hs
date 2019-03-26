@@ -36,7 +36,7 @@ findList' pos xs ys
 
 -- operator ##
 (##) :: Eq a => [a] -> [a] -> Int
-_ ## _ = 42  -- DUMMY; REWRITE THIS!!!
+xs ## ys = length (filter (\ (x, y) -> x == y) (zip xs ys))
 
 
 -- filterAB
