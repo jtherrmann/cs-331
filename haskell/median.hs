@@ -2,7 +2,12 @@ import Data.List
 import System.IO
 
 
-median xs = sort xs !! div (length xs) 2
+median [] = Nothing
+median xs = Just (sort xs !! div (length xs) 2)
+
+
+medianStr Nothing       = "Empty list - no median"
+medianStr (Just median) = "Median: " ++ show median
 
 
 loop :: [Integer] -> IO()
@@ -11,7 +16,7 @@ loop xs = do
   hFlush stdout
   line <- getLine
   if line == ""
-    then putStrLn $ "Median: " ++ (show $ median xs)
+    then putStrLn $ medianStr $ median xs
     else loop $ read line : xs
 
 
