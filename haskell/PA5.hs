@@ -9,6 +9,7 @@
 -- - read project reqs, coding standards, lecture slides:
 --   - https://www.cs.uaf.edu/users/chappell/public_html/class/2019_spr/cs331/lect/cs331-20190322-forth_alloc.pdf
 -- - how to separate public/private functions/variables?
+-- - TODOs in file
 
 module PA5 where
 
@@ -57,5 +58,9 @@ sumEvenOdd :: Num a => [a] -> (a, a)
   Above, "..." should be replaced by other code. The "fold*" must be
   one of the following: foldl, foldr, foldl1, foldr1.
 -}
-sumEvenOdd _ = (0, 0)  -- DUMMY; REWRITE THIS!!!
+-- TODO: does it need to EXACTLY match above? (i.e. just "xs")
+sumEvenOdd xs = foldl helper (0, 0) (zip [0..] xs)
 
+helper (evenSum, oddSum) (index, x)
+  | even index = (evenSum + x, oddSum)
+  | otherwise  = (evenSum, oddSum + x)
