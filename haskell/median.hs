@@ -10,6 +10,7 @@ medianStr Nothing       = "Empty list - no median"
 medianStr (Just median) = "Median: " ++ show median
 
 
+-- TODO: rename
 loop :: [Integer] -> IO()
 loop xs = do
   putStr "Enter number (blank line to end): "
@@ -23,5 +24,13 @@ loop xs = do
 main = do
   putStrLn "Enter a list of integers, one on each line."
   putStrLn "I will compute the median of the list.\n"
-
   loop []
+
+  putStr "\nCompute another median? [y/n] "
+  hFlush stdout
+  line <- getLine
+  if line == "n"
+    then putStrLn "Bye!"
+    else do
+      putStrLn ""
+      main
