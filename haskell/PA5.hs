@@ -41,7 +41,7 @@ xs ## ys = length (filter (\ (x, y) -> x == y) (zip xs ys))
 
 -- filterAB
 filterAB :: (a -> Bool) -> [a] -> [b] -> [b]
-filterAB _ _ bs = bs  -- DUMMY; REWRITE THIS!!!
+filterAB pred xs ys = [y | (x, y) <- zip xs ys, pred x]
 
 
 -- sumEvenOdd
