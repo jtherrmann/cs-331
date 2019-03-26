@@ -5,6 +5,10 @@
 -- For CS F331 / CSCE A331 Spring 2019
 -- Solutions to Assignment 5 Exercise B
 
+-- TODO:
+-- - read project reqs, coding standards
+-- - how to separate public/private functions/variables?
+
 module PA5 where
 
 
