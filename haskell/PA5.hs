@@ -26,7 +26,12 @@ collatzFunction n
 
 -- findList
 findList :: Eq a => [a] -> [a] -> Maybe Int
-findList _ _ = Just 42  -- DUMMY; REWRITE THIS!!!
+findList = findList' 0
+
+findList' pos xs [] = Nothing
+findList' pos xs ys
+  | take (length xs) ys == xs = Just pos
+  | otherwise                 = findList' (pos + 1) xs (tail ys)
 
 
 -- operator ##
