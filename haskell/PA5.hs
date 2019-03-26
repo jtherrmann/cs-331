@@ -6,7 +6,8 @@
 -- Solutions to Assignment 5 Exercise B
 
 -- TODO:
--- - read project reqs, coding standards
+-- - read project reqs, coding standards, lecture slides:
+--   - https://www.cs.uaf.edu/users/chappell/public_html/class/2019_spr/cs331/lect/cs331-20190322-forth_alloc.pdf
 -- - how to separate public/private functions/variables?
 
 module PA5 where
