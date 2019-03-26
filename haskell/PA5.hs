@@ -10,7 +10,14 @@ module PA5 where
 
 -- collatzCounts
 collatzCounts :: [Integer]
-collatzCounts = [42..]  -- DUMMY; REWRITE THIS!!!
+collatzCounts = map (collatzCount 0) [1..]
+
+collatzCount count 1 = count
+collatzCount count n = collatzCount (count + 1) (collatzFunction n)
+
+collatzFunction n
+  | odd n     = 3 * n + 1
+  | otherwise = div n 2
 
 
 -- findList
