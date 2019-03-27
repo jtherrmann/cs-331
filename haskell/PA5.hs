@@ -1,15 +1,16 @@
--- PA5.hs  INCOMPLETE
--- Glenn G. Chappell
--- 21 Mar 2019
+-- PA5.hs
+-- Jake Herrmann
+-- 27 Mar 2019
+-- CS 331 Spring 2019
 --
--- For CS F331 / CSCE A331 Spring 2019
--- Solutions to Assignment 5 Exercise B
+-- PA5 module for Assignment 5.
+-- Based on a skeleton file by Glenn G. Chappell.
 
 -- TODO:
 -- - read project reqs, coding standards, lecture slides:
 --   - https://www.cs.uaf.edu/users/chappell/public_html/class/2019_spr/cs331/lect/cs331-20190322-forth_alloc.pdf
 -- - how to separate public/private functions/variables?
--- - TODOs in file
+-- - TODOs in files
 
 module PA5 where
 

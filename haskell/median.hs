@@ -1,3 +1,11 @@
+-- median.hs
+-- Jake Herrmann
+-- 27 Mar 2019
+-- CS 331 Spring 2019
+--
+-- Median calculator for Assignment 5.
+
+
 module Main where
 
 
