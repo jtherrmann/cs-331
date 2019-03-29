@@ -6,11 +6,6 @@
 -- PA5 module for Assignment 5.
 -- Based on a skeleton file by Glenn G. Chappell.
 
--- TODO:
--- - read project reqs, coding standards, lecture slides:
---   - https://www.cs.uaf.edu/users/chappell/public_html/class/2019_spr/cs331/lect/cs331-20190322-forth_alloc.pdf
--- - how to separate public/private functions/variables?
--- - TODOs in files
 
 module PA5 where
 
