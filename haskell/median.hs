@@ -6,6 +6,11 @@
 -- Median calculator for Assignment 5.
 
 
+-- WARNING: This program does not validate user input. When prompted for a
+-- number, the user should enter a valid integer (can be positive or negative).
+-- When prompted for a yes or no response, the user should enter y or n.
+
+
 module Main where
 
 
