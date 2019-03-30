@@ -64,11 +64,5 @@ filterAB pred xs ys = [y | (x, y) <- zip xs ys, pred x]
 --
 -- Return the sum of the even-index items and the sum of the odd-index items.
 sumEvenOdd :: Num a => [a] -> (a, a)
-sumEvenOdd xs = foldl addToSum (0, 0) (zip [0..] xs)
-
--- addToSum
---
--- Add the given number to the appropriate sum based on its index.
-addToSum (evenSum, oddSum) (index, x)
-  | even index = (evenSum + x, oddSum)
-  | otherwise  = (evenSum, oddSum + x)
+sumEvenOdd xs = foldr addToSum (0, 0) xs where
+  addToSum x (sum1, sum2) = (sum2 + x, sum1)
