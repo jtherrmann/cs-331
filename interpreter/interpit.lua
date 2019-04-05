@@ -1,3 +1,7 @@
+-- TODO
+-- use interpit_test.lua when it becomes available
+-- check for updates to interpit.lua
+
 -- interpit.lua  UNFINISHED
 -- Glenn G. Chappell
 -- 3 Apr 2019
