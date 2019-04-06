@@ -223,11 +223,19 @@ function interpit.interp(ast, state, incall, outcall)
             end
             interp_stmt_list(body)
         elseif (ast[1] == IF_STMT) then
-            condition = eval_expr(ast[2])
-            if condition ~= 0 then
-                interp_stmt_list(ast[3])
+            local condition
+            local i = 2
+            repeat
+                condition = eval_expr(ast[i])
+                if condition ~= 0 then
+                    interp_stmt_list(ast[i + 1])
+                    return
+                end
+                i = i + 2
+            until ast[i] == nil or ast[i][1] == STMT_LIST
+            if ast[i] ~= nil then
+                interp_stmt_list(ast[i])
             end
-            -- TODO
         elseif (ast[1] == WHILE_STMT) then
             while eval_expr(ast[2]) ~= 0 do
                 interp_stmt_list(ast[3])
