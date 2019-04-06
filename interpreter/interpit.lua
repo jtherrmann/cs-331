@@ -293,6 +293,46 @@ function interpit.interp(ast, state, incall, outcall)
                     local operand = eval_expr(ast[2])
                     return boolToInt(operand == 0)
                 end
+            elseif ast[1][1] == BIN_OP then
+                local op = ast[1][2]
+                local operand1 = eval_expr(ast[2])
+                local operand2 = eval_expr(ast[3])
+                if op == "+" then
+                    return operand1 + operand2
+                elseif op == "-" then
+                    return operand1 - operand2
+                elseif op == "*" then
+                    return operand1 * operand2
+                elseif op == "/" then
+                    if operand2 == 0 then
+                        return 0
+                    end
+                    return numToInt(operand1 / operand2)
+                elseif op == "%" then
+                    if operand2 == 0 then
+                        return 0
+                    end
+                    return operand1 % operand2
+                elseif op == "==" then
+                    return boolToInt(operand1 == operand2)
+                elseif op == "!=" then
+                    return boolToInt(operand1 ~= operand2)
+                elseif op == "<" then
+                    return boolToInt(operand1 < operand2)
+                elseif op == "<=" then
+                    return boolToInt(operand1 <= operand2)
+                elseif op == ">" then
+                    return boolToInt(operand1 > operand2)
+                elseif op == ">=" then
+                    return boolToInt(operand1 >= operand2)
+                elseif op == ">=" then
+                    return boolToInt(operand1 >= operand2)
+                elseif op == "&&" then
+                    return boolToInt(operand1 ~= 0 and operand2 ~= 0)
+                else
+                    assert(op == "||")
+                    return boolToInt(operand1 ~= 0 or operand2 ~= 0)
+                end
             end
             -- TODO leave this here? add message
             assert(false)
