@@ -236,6 +236,13 @@ function interpit.interp(ast, state, incall, outcall)
         if ast[1] == NUMLIT_VAL then
             local value = strToNum(ast[2])
             return value
+        elseif ast[1] == BOOLLIT_VAL then
+            if ast[2] == "true" then
+                return 1
+            else
+                assert(ast[2] == "false")
+                return 0
+            end
         elseif ast[1] == READNUM_CALL then
             local value = strToNum(incall())
             return value
