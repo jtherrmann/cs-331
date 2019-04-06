@@ -244,10 +244,10 @@ function interpit.interp(ast, state, incall, outcall)
             return value
         elseif ast[1] == BOOLLIT_VAL then
             if ast[2] == "true" then
-                return 1
+                return boolToInt(true)
             else
                 assert(ast[2] == "false")
-                return 0
+                return boolToInt(false)
             end
         elseif ast[1] == SIMPLE_VAR then
             local name = ast[2]
