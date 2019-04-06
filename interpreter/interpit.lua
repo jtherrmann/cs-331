@@ -1,8 +1,4 @@
--- TODO
--- use interpit_test.lua when it becomes available
--- check for updates to interpit.lua
-
--- interpit.lua  UNFINISHED
+-- interpit.lua  INCOMPLETE
 -- Glenn G. Chappell
 -- 3 Apr 2019
 --
@@ -178,12 +174,71 @@ function interpit.interp(ast, state, incall, outcall)
 
     -- Forward declare local functions
     local interp_stmt_list
+    local interp_stmt
+    local eval_expr
 
 
     function interp_stmt_list(ast)
-        -- TODO: WRITE THIS!!!
-        print("INTERPRETING!")  -- DUMMY
+        assert(ast[1] == STMT_LIST,
+               "stmt list AST must start w/ STMT_LIST")
+        for i = 2, #ast do
+            interp_stmt(ast[i])
+        end
     end
+
+
+    function interp_stmt(ast)
+        if (ast[1] == WRITE_STMT) then
+            for i = 2, #ast do
+                assert(type(ast[i]) == "table",
+                       "print arg must be table")
+                if ast[i][1] == CR_OUT then
+                    outcall("\n")
+                elseif ast[i][1] == STRLIT_OUT then
+                    local str = ast[i][2]
+                    outcall(str:sub(2,str:len()-1))
+                else
+                    local value = eval_expr(ast[i])
+                    outcall(numToStr(value))
+                end
+            end
+        elseif (ast[1] == FUNC_DEF) then
+            local name = ast[2]
+            local body = ast[3]
+            state.f[name] = body
+        elseif (ast[1] == FUNC_CALL) then
+            local name = ast[2]
+            local body = state.f[name]
+            if body == nil then
+                body = { STMT_LIST }  -- Default AST
+            end
+            interp_stmt_list(body)
+        elseif (ast[1] == IF_STMT) then
+            print("IF-stmt; DUNNO WHAT TO DO!!!")
+        elseif (ast[1] == WHILE_STMT) then
+            print("WHILE-stmt; DUNNO WHAT TO DO!!!")
+        elseif (ast[1] == RETURN_STMT) then
+            print("RETURN-stmt; DUNNO WHAT TO DO!!!")
+        elseif (ast[1] == ASSN_STMT) then
+            print("ASSIGNMENT-stmt; DUNNO WHAT TO DO!!!")
+        else
+            assert(false, "Illegal statement")
+        end
+    end
+
+
+    function eval_expr(ast)
+        if ast[1] == NUMLIT_VAL then
+            local value = strToNum(ast[2])
+            return value
+        elseif ast[1] == READNUM_CALL then
+            local value = strToNum(incall())
+            return value
+        else
+            print("EXPRESSION involving not-written-yet case!!!")
+        end
+    end
+
 
     -- Body of function interp
     interp_stmt_list(ast)
