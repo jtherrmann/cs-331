@@ -249,6 +249,14 @@ function interpit.interp(ast, state, incall, outcall)
                 assert(ast[2] == "false")
                 return 0
             end
+        elseif ast[1] == SIMPLE_VAR then
+            local name = ast[2]
+            local value = state.v[name]
+            if value ~= nil then
+                return value
+            else
+                return 0
+            end
         elseif ast[1] == READNUM_CALL then
             local value = strToNum(incall())
             return value
