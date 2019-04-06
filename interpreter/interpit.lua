@@ -229,9 +229,9 @@ function interpit.interp(ast, state, incall, outcall)
             end
             -- TODO
         elseif (ast[1] == WHILE_STMT) then
-            -- TODO
-            assert(false)
-            -- print("WHILE-stmt; DUNNO WHAT TO DO!!!")
+            while eval_expr(ast[2]) ~= 0 do
+                interp_stmt_list(ast[3])
+            end
         elseif (ast[1] == RETURN_STMT) then
             -- TODO
             assert(false)
