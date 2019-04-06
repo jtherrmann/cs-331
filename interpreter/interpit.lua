@@ -1,6 +1,6 @@
 -- TODO:
 -- - use linter
--- - factor out smaller functions (e.g. from eval_expr)
+-- - continue factoring out smaller functions given time
 -- - TODO/FIXME in file
 -- - assignment reqs, coding standards
 
