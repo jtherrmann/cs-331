@@ -223,11 +223,17 @@ function interpit.interp(ast, state, incall, outcall)
             end
             interp_stmt_list(body)
         elseif (ast[1] == IF_STMT) then
-            print("IF-stmt; DUNNO WHAT TO DO!!!")
+            -- TODO
+            assert(false)
+            -- print("IF-stmt; DUNNO WHAT TO DO!!!")
         elseif (ast[1] == WHILE_STMT) then
-            print("WHILE-stmt; DUNNO WHAT TO DO!!!")
+            -- TODO
+            assert(false)
+            -- print("WHILE-stmt; DUNNO WHAT TO DO!!!")
         elseif (ast[1] == RETURN_STMT) then
-            print("RETURN-stmt; DUNNO WHAT TO DO!!!")
+            -- TODO
+            assert(false)
+            -- print("RETURN-stmt; DUNNO WHAT TO DO!!!")
         elseif (ast[1] == ASSN_STMT) then
             local lvalue = ast[2]
             local rvalue = eval_expr(ast[3])
@@ -339,7 +345,9 @@ function interpit.interp(ast, state, incall, outcall)
             -- TODO leave this here? add message
             assert(false)
         else
-            print("EXPRESSION involving not-written-yet case!!!")
+            -- TODO
+            assert(false)
+            -- print("EXPRESSION involving not-written-yet case!!!")
         end
     end
 
