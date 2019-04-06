@@ -1,0 +1,5 @@
+echo "Passed: "
+lua5.3 all_interpit_tests.lua | grep -o passed | wc -l
+echo
+echo "Failed: "
+lua5.3 all_interpit_tests.lua | grep -o FAILED | wc -l
