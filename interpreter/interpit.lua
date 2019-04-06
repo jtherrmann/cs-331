@@ -231,6 +231,14 @@ function interpit.interp(ast, state, incall, outcall)
             if lvalue[1] == SIMPLE_VAR then
                 local name = lvalue[2]
                 state.v[name] = rvalue
+            else
+                assert(lvalue[1] == ARRAY_VAR)
+                local name = lvalue[2]
+                local key = eval_expr(lvalue[3])
+                if state.a[name] == nil then
+                    state.a[name] = {}
+                end
+                state.a[name][key] = rvalue
             end
         else
             assert(false, "Illegal statement")
