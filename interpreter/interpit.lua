@@ -220,7 +220,12 @@ function interpit.interp(ast, state, incall, outcall)
         elseif (ast[1] == RETURN_STMT) then
             print("RETURN-stmt; DUNNO WHAT TO DO!!!")
         elseif (ast[1] == ASSN_STMT) then
-            print("ASSIGNMENT-stmt; DUNNO WHAT TO DO!!!")
+            local lvalue = ast[2]
+            local rvalue = eval_expr(ast[3])
+            if lvalue[1] == SIMPLE_VAR then
+                local name = lvalue[2]
+                state.v[name] = rvalue
+            end
         else
             assert(false, "Illegal statement")
         end
@@ -250,4 +255,3 @@ end
 
 
 return interpit
-
