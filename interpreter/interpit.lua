@@ -241,9 +241,8 @@ function interpit.interp(ast, state, incall, outcall)
                 interp_stmt_list(ast[3])
             end
         elseif (ast[1] == RETURN_STMT) then
-            -- TODO
-            assert(false)
-            -- print("RETURN-stmt; DUNNO WHAT TO DO!!!")
+            local value = eval_expr(ast[2])
+            state.v["return"] = value
         elseif (ast[1] == ASSN_STMT) then
             local lvalue = ast[2]
             local rvalue = eval_expr(ast[3])
@@ -296,6 +295,9 @@ function interpit.interp(ast, state, incall, outcall)
                 return 0
             end
             return value
+        elseif ast[1] == FUNC_CALL then
+            interp_stmt(ast)
+            return eval_expr({SIMPLE_VAR, "return"})
         elseif ast[1] == READNUM_CALL then
             local value = strToNum(incall())
             return value
