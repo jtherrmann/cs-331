@@ -182,6 +182,9 @@ function interpit.interp(ast, state, incall, outcall)
     local interp_stmt_list
     local interp_stmt
     local eval_expr
+    local eval_operation
+    local eval_unary_operation
+    local eval_binary_operation
 
 
     function interp_stmt_list(ast)
@@ -298,61 +301,83 @@ function interpit.interp(ast, state, incall, outcall)
         elseif ast[1] == READNUM_CALL then
             local value = strToNum(incall())
             return value
-        elseif type(ast[1]) == "table" then
-            if ast[1][1] == UN_OP then
-                local op = ast[1][2]
-                if op == "+" then
-                    return eval_expr(ast[2])
-                elseif op == "-" then
-                    return -eval_expr(ast[2])
-                else
-                    assert(op == "!")
-                    local operand = eval_expr(ast[2])
-                    return boolToInt(operand == 0)
-                end
-            elseif ast[1][1] == BIN_OP then
-                local op = ast[1][2]
-                local operand1 = eval_expr(ast[2])
-                local operand2 = eval_expr(ast[3])
-                if op == "+" then
-                    return operand1 + operand2
-                elseif op == "-" then
-                    return operand1 - operand2
-                elseif op == "*" then
-                    return operand1 * operand2
-                elseif op == "/" then
-                    if operand2 == 0 then
-                        return 0
-                    end
-                    return numToInt(operand1 / operand2)
-                elseif op == "%" then
-                    if operand2 == 0 then
-                        return 0
-                    end
-                    return operand1 % operand2
-                elseif op == "==" then
-                    return boolToInt(operand1 == operand2)
-                elseif op == "!=" then
-                    return boolToInt(operand1 ~= operand2)
-                elseif op == "<" then
-                    return boolToInt(operand1 < operand2)
-                elseif op == "<=" then
-                    return boolToInt(operand1 <= operand2)
-                elseif op == ">" then
-                    return boolToInt(operand1 > operand2)
-                elseif op == ">=" then
-                    return boolToInt(operand1 >= operand2)
-                elseif op == ">=" then
-                    return boolToInt(operand1 >= operand2)
-                elseif op == "&&" then
-                    return boolToInt(operand1 ~= 0 and operand2 ~= 0)
-                else
-                    assert(op == "||")
-                    return boolToInt(operand1 ~= 0 or operand2 ~= 0)
-                end
-            end
         end
-        assert(false, "Illegal expression")
+
+        assert(type(ast[1]) == "table")
+        return eval_operation(ast)
+    end
+
+
+    function eval_operation(ast)
+        assert(type(ast[1]) == "table")
+        if ast[1][1] == UN_OP then
+            return eval_unary_operation(ast)
+        end
+
+        assert(ast[1][1] == BIN_OP)
+        return eval_binary_operation(ast)
+    end
+
+
+    function eval_unary_operation(ast)
+        assert(ast[1][1] == UN_OP)
+        local op = ast[1][2]
+
+        if op == "+" then
+            return eval_expr(ast[2])
+        elseif op == "-" then
+            return -eval_expr(ast[2])
+        end
+
+        assert(op == "!")
+        local operand = eval_expr(ast[2])
+        return boolToInt(operand == 0)
+    end
+
+
+    function eval_binary_operation(ast)
+        assert(ast[1][1] == BIN_OP)
+
+        local op = ast[1][2]
+        local operand1 = eval_expr(ast[2])
+        local operand2 = eval_expr(ast[3])
+
+        if op == "+" then
+            return operand1 + operand2
+        elseif op == "-" then
+            return operand1 - operand2
+        elseif op == "*" then
+            return operand1 * operand2
+        elseif op == "/" then
+            if operand2 == 0 then
+                return 0
+            end
+            return numToInt(operand1 / operand2)
+        elseif op == "%" then
+            if operand2 == 0 then
+                return 0
+            end
+            return operand1 % operand2
+        elseif op == "==" then
+            return boolToInt(operand1 == operand2)
+        elseif op == "!=" then
+            return boolToInt(operand1 ~= operand2)
+        elseif op == "<" then
+            return boolToInt(operand1 < operand2)
+        elseif op == "<=" then
+            return boolToInt(operand1 <= operand2)
+        elseif op == ">" then
+            return boolToInt(operand1 > operand2)
+        elseif op == ">=" then
+            return boolToInt(operand1 >= operand2)
+        elseif op == ">=" then
+            return boolToInt(operand1 >= operand2)
+        elseif op == "&&" then
+            return boolToInt(operand1 ~= 0 and operand2 ~= 0)
+        end
+
+        assert(op == "||")
+        return boolToInt(operand1 ~= 0 or operand2 ~= 0)
     end
 
 
