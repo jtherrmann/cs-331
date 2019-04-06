@@ -265,6 +265,18 @@ function interpit.interp(ast, state, incall, outcall)
             else
                 return 0
             end
+        elseif ast[1] == ARRAY_VAR then
+            local name = ast[2]
+            if state.a[name] == nil then
+                return 0
+            end
+
+            local key = eval_expr(ast[3])
+            local value = state.a[name][key]
+            if value == nil then
+                return 0
+            end
+            return value
         elseif ast[1] == READNUM_CALL then
             local value = strToNum(incall())
             return value
