@@ -114,7 +114,7 @@ end
 --
 -- THIS FUNCTION IS INTENDED FOR USE IN DEBUGGING ONLY!
 -- IT SHOULD NOT BE CALLED IN THE FINAL VERSION OF THE CODE.
-function astToStr(x)
+local function astToStr(x)
     local symbolNames = {
         "STMT_LIST", "WRITE_STMT", "FUNC_DEF", "FUNC_CALL", "IF_STMT",
         "WHILE_STMT", "RETURN_STMT", "ASSN_STMT", "CR_OUT",
