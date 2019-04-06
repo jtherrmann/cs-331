@@ -3,7 +3,9 @@
 -- - replace any placeholder comments / output w/ assert(false) (because it
 --   seemed like some of the placeholder output was being printed during
 --   otherwise successful tests)
+-- - factor out smaller functions (e.g. from eval_expr)
 -- - TODO/FIXME in file
+-- - assignment reqs, coding standards
 
 -- interpit.lua  INCOMPLETE
 -- Glenn G. Chappell
