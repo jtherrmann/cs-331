@@ -223,9 +223,11 @@ function interpit.interp(ast, state, incall, outcall)
             end
             interp_stmt_list(body)
         elseif (ast[1] == IF_STMT) then
+            condition = eval_expr(ast[2])
+            if condition ~= 0 then
+                interp_stmt_list(ast[3])
+            end
             -- TODO
-            assert(false)
-            -- print("IF-stmt; DUNNO WHAT TO DO!!!")
         elseif (ast[1] == WHILE_STMT) then
             -- TODO
             assert(false)
