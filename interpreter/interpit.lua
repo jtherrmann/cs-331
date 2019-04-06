@@ -286,9 +286,12 @@ function interpit.interp(ast, state, incall, outcall)
                 local op = ast[1][2]
                 if op == "+" then
                     return eval_expr(ast[2])
-                else
-                    assert(op == "-")
+                elseif op == "-" then
                     return -eval_expr(ast[2])
+                else
+                    assert(op == "!")
+                    local operand = eval_expr(ast[2])
+                    return boolToInt(operand == 0)
                 end
             end
             -- TODO leave this here? add message
