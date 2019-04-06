@@ -354,13 +354,8 @@ function interpit.interp(ast, state, incall, outcall)
                     return boolToInt(operand1 ~= 0 or operand2 ~= 0)
                 end
             end
-            -- TODO leave this here? add message
-            assert(false)
-        else
-            -- TODO
-            assert(false)
-            -- print("EXPRESSION involving not-written-yet case!!!")
         end
+        assert(false, "Illegal expression")
     end
 
 
