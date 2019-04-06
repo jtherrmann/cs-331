@@ -3,6 +3,7 @@
 -- - replace any placeholder comments / output w/ assert(false) (because it
 --   seemed like some of the placeholder output was being printed during
 --   otherwise successful tests)
+-- - TODO/FIXME in file
 
 -- interpit.lua  INCOMPLETE
 -- Glenn G. Chappell
@@ -280,6 +281,18 @@ function interpit.interp(ast, state, incall, outcall)
         elseif ast[1] == READNUM_CALL then
             local value = strToNum(incall())
             return value
+        elseif type(ast[1]) == "table" then
+            if ast[1][1] == UN_OP then
+                local op = ast[1][2]
+                if op == "+" then
+                    return eval_expr(ast[2])
+                else
+                    assert(op == "-")
+                    return -eval_expr(ast[2])
+                end
+            end
+            -- TODO leave this here? add message
+            assert(false)
         else
             print("EXPRESSION involving not-written-yet case!!!")
         end
