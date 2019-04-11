@@ -1,16 +1,10 @@
--- TODO:
--- - use linter
--- - continue factoring out smaller functions given time
--- - TODO/FIXME in file
--- - assignment reqs, coding standards
-
--- interpit.lua  INCOMPLETE
+-- interpit.lua
+-- Jake Herrmann
 -- Glenn G. Chappell
--- 3 Apr 2019
+-- 10 Apr 2019
 --
--- For CS F331 / CSCE A331 Spring 2019
--- Interpret AST from parseit.parse
--- For Assignment 6, Exercise B
+-- CS 331 Spring 2019
+-- Interpreter for the Jerboa programming language.
 
 
 -- *******************************************************************
@@ -18,7 +12,7 @@
 -- *******************************************************************
 
 
-local interpit = {}  -- Our module
+local interpit = {}
 
 
 -- ***** Variables *****
