@@ -1,4 +1,5 @@
-%% TODO says true / gives solution but then says no
+%% TODO says true / gives solution but then says no; this was covered in class
+%% on wed 04/24
 
 take(_, [], []).
 
