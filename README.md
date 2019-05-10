@@ -1,3 +1,3 @@
 Jake Herrmann\
-CS 331 Spring 2019\
-Programming Languages
+CS 331: Programming Languages\
+Spring 2019
